@@ -115,13 +115,13 @@ def Battle():
 # After Battle Is Finished It Doesn't Stop Moving Until Another Battle Starts
 def Battle_Idle():
     print("Waiting Until Battle Is Finished...")
-    # The Earn Crowns Symbol Won't Display While In Combat
-    Earn_Crowns_Symbol = (spell_maker("Earn_Crowns_Symbol"))
-    position = image_search(Earn_Crowns_Symbol, 0.6)
+    # The Spell_Book Symbol Won't Display While In Combat
+    Spell_Book = (spell_maker("Spell_Book"))
+    position = image_search(Spell_Book, 0.6)
     # Waits Until Earn Crowns Symbol Is Displayed
     while position == None:
         time.sleep(1)
-        position = image_search(Earn_Crowns_Symbol, 0.6)
+        position = image_search(Spell_Book, 0.6)
     if position != None:
         print("\033[32m" + "VICTORY!!!" + "\033[0m")
         time.sleep(3)
