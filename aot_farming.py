@@ -73,7 +73,7 @@ def spell_click(spell, attempt, threshold):
     position = image_search(spell, threshold)
     if position != [-1, -1] and position != None:
         x, y = position
-        x += 20
+        x -= 10
         print("Spell Found")
         print("position: " + str(position))
         pya.moveTo(x, y, 1, pya.easeOutQuad)
@@ -155,6 +155,10 @@ if (input("\033[32m" + "Use Enchanted? y/n: \033[0m" ) == "y"):
 print("\033[33m" + "Make Sure You Are Standing In Front Of Enemies")
 time.sleep(1)
 print("Getting Ready In 3...")
+time.sleep(1)
+print("4...")
+time.sleep(1)
+print("3...")
 time.sleep(1)
 print("2...")
 time.sleep(1)
