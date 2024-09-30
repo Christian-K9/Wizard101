@@ -154,7 +154,7 @@ if (input("\033[32m" + "Use Enchanted? y/n: \033[0m" ) == "y"):
 
 print("\033[33m" + "Make Sure You Are Standing In Front Of Enemies")
 time.sleep(1)
-print("Getting Ready In 3...")
+print("Getting Ready In 5...")
 time.sleep(1)
 print("4...")
 time.sleep(1)
