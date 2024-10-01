@@ -1,5 +1,10 @@
 import spell_index as aot
+import pyautogui as pya
 import time
+
+def move():
+    pya.keyDown()
+    
 
 spell_card = input("\033[32m" + "Enter The Spell You're Using: \033[0m")
 use_Enchanted = False
@@ -9,7 +14,7 @@ if (input("\033[32m" + "Use Enchanted? y/n: \033[0m" ) == "y"):
     enchanted_card = input("\033[32m" +"Which Enchanted Card? : \033[0m")
 
 
-print("\033[33m" + "Make Sure You Are Standing In Front Of Enemies")
+print("\033[33m" + "Make Sure You Are Standing In Front Of Sigil")
 time.sleep(1)
 print("Getting Ready In 5...")
 time.sleep(1)
@@ -26,5 +31,5 @@ aot.game_click()
 aot.move()
 
 while True:
-    aot.Battle(use_Enchanted, enchanted_card, spell_card)
-    aot.Battle_Idle()
+    aot.aot_Battle(use_Enchanted, enchanted_card, spell_card)
+    aot.victory_Idle("aot_battle")
