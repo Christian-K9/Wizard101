@@ -32,4 +32,4 @@ aot.move()
 
 while True:
     aot.aot_Battle(use_Enchanted, enchanted_card, spell_card)
-    aot.victory_Idle("aot_battle")
+    aot.victory_Idle("aot_battle", spell_card)

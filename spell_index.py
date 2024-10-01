@@ -98,7 +98,7 @@ def spell_click(spell, attempt, threshold):
     else:
         # After Third Attempt It Will Scroll To Find Spell
         if attempt == 3:
-            print("Attempting To Use Mouse to Find Spell")
+            print("Attempting To Use Mouse to Find Spell...")
             scroll_and_search(spell)
         else:
             attempt += 1
@@ -127,7 +127,7 @@ def enchant_card(enchanted, spell):
     time.sleep(0.5)
 
 def cast_on_yourself():
-    spell_click(spell_maker("Yourself"), 0, 0.7)
+    spell_click(spell_maker("Yourself"), 0, 0.8)
     
 def aot_Battle(use_Enchanted, enchanted_card, spell_card):
     if (use_Enchanted == True):
@@ -138,7 +138,7 @@ def aot_Battle(use_Enchanted, enchanted_card, spell_card):
         spell_click(spell_maker(spell_card), 0, 0.6)
 
 #Blades You Twice, Then Cast Orthrus  
-def three_round_battle(enchanted_list, spell_card_list):
+def four_round_battle(enchanted_list, spell_card_list):
     #enchanted_list[0] = enchant for buff
     #enchanted_list[1] = enchant for spell
     #spell_card_list[0] = first buff
@@ -152,48 +152,67 @@ def three_round_battle(enchanted_list, spell_card_list):
     enchanted_spell_list = []
     enchanted_spell_list.append((enchanted_list[1] + "_Enchanted_" + spell_card_list[1]))
     enchanted_spell_list.append((enchanted_list[1] + "_Enchanted_" + spell_card_list[2]))
-    enchanted_spell_list.append((enchanted_list[0] + "_Enchanted_" + spell_card_list[0]))
     enchanted_spell_list.append(spell_card_list[3])
+    enchanted_spell_list.append((enchanted_list[0] + "_Enchanted_" + spell_card_list[0]))
+
     print("Order Of Spells: " + str(enchanted_spell_list))
-    for i in enchanted_spell_list:
-        spell_click(spell_maker(i), 0, 0.6)
-        if i != str(enchanted_spell_list[2]):
+    i = 0
+    while i < 4:
+        spell_click(spell_maker(enchanted_spell_list[i]), 0, 0.7)
+        if i < 2:
             cast_on_yourself()
-            battle_idle()
-        else:
+        if i == 3:
             break
-    victory_Idle("dungeon_battle")
+        battle_idle()
+        check_for_fizzles(enchanted_spell_list[i])
+        i += 1
+    victory_Idle("dungeon_battle", enchanted_spell_list[-1])
         
-
-#"C:\Users\cmken\Documents\GitHub\Wizard101\Spell_Folder\Pass_Button.png"
-#"C:\Users\cmken\Documents\GitHub\Wizard101\Spell_Folder\Pass_Button.png"
-
-def battle_idle():
-    print("Waiting For Battle To Start")#
-    Pass_Button = spell_maker("Pass_Button")
-    position = image_search(Pass_Button, 0.5)
+def wait_for_image(image):
+    spell = spell_maker(image)
+    position = image_search(spell, 0.6)
     # Waits Until Pass Button Is Displayed
     while position == None:
         time.sleep(0.5)
-        position = image_search(Pass_Button, 0.5)
+        position = image_search(spell, 0.6)
+
+def next_round(last_spell_used):
+    wait_for_image("Pass_Button")
+    position = image_search(spell_maker(last_spell_used), 0.6)
+    if position != None:
+        print("Something During Battle Occured")
+        print("Attempting To Cast Spell Again")
+        spell_click(spell_maker(last_spell_used), 0, 0.7)
+
+
+def check_for_fizzles(last_spell_used):
+        time.sleep(1)
+        position = image_search(spell_maker("Pass_Button"), 0.6)
+        if position != None:
+            next_round(last_spell_used)
+
+def battle_idle():
+    print("Waiting For Battle To Start...")
+    wait_for_image("Pass_Button")
 
 # After Battle Is Finished It Doesn't Stop Moving Until Another Battle Starts
-def victory_Idle(battle_type):
+def victory_Idle(battle_type, last_spell_used):
     print("Waiting Until Battle Is Finished...")
     # The Spell_Book Symbol Won't Display While In Combat
     Spell_Book = (spell_maker("Spell_Book"))
+    Pass_Button = (spell_maker("Pass_Button"))
     position = image_search(Spell_Book, 0.6)
-    # Waits Until Earn Crowns Symbol Is Displayed
     while position == None:
+        check_for_fizzles(last_spell_used)
         time.sleep(1)
         position = image_search(Spell_Book, 0.6)
+        time.sleep(1)
     if position != None:
         print("\033[32m" + "VICTORY!!!" + "\033[0m")
         time.sleep(3)
-        print("Getting Ready For Next Battle")
+        print("Getting Ready For Next Battle...")
         if (battle_type == "aot_battle"):
             movement_list = ["a", "d"]
-            Pass_Button = (spell_maker("Pass_Button"))
             position = image_search(Pass_Button, 0.6)
             while position == None:
                 movement = random.choice(movement_list)
@@ -216,13 +235,13 @@ def move():
     
 def turn_around():
     pya.keyDown("a")
-    time.sleep(0.3)
+    time.sleep(0.27)
     pya.keyUp("a")
 
 def enter_dungeon():
     game_click()
     pya.keyDown("x")
-    time.sleep(1)
+    time.sleep(0.95)
     pya.keyUp("x")
     print("Waiting To Enter Dungeon")
     time.sleep(20)
@@ -233,3 +252,5 @@ def exit_dungeon():
     pya.keyDown("w")
     time.sleep(4)
     pya.keyUp("w")
+    print("Waiting...")
+    time.sleep(10)
