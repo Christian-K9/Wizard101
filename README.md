@@ -1,14 +1,25 @@
 # Wizard101
  Wizard101 Automated Scripts
 
-install the following:
+have python3 installed
+install the following on command prompt:
 -pyautogui
 -opencv-python
 -numpy
 -keyboard
 -imagesearch
 
-resolution of screen must be 1024x768
-must be standing in front of enemy
+Spells Must Be in "Spell_Folder" File
+    -If not Spells can be found on https://wiki.wizard101central.com
 
-have python3 installed
+resolution of screen must be 1024x768
+Screen Must Be At Max Brightness
+
+aot_farm.py rules:
+    -must have all spells your using in "Spell_Folder" File
+    -must start by standing in front of enemies
+
+loremaster_farm.py rules:
+    -must have all spells your using in "Spell_Folder" File
+    -must start by standing in front of sigil
+    -must use 2 sharpened blades followed by an alternate buffer such as "frenzy"

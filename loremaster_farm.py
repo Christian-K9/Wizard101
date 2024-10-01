@@ -29,9 +29,10 @@ def main():
 def loremaster_run(enchanted_list, spell_card_list):
     while True:
         farm.game_click()
-        farm.enter_dungeon()
+        farm.enter_dungeon("Loremaster_Banner")
         farm.move()
         farm.four_round_battle(enchanted_list, spell_card_list)
+        farm.exit_dungeon("Dragonspyre_Floor_Pattern")
         pya.keyDown("s")
         time.sleep(0.5)
         pya.keyUp("s")

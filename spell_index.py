@@ -164,7 +164,7 @@ def four_round_battle(enchanted_list, spell_card_list):
         if i == 3:
             break
         battle_idle()
-        check_for_fizzles(enchanted_spell_list[i])
+        check_for_fizzles(enchanted_spell_list[i], True)
         i += 1
     victory_Idle("dungeon_battle", enchanted_spell_list[-1])
         
@@ -176,20 +176,22 @@ def wait_for_image(image):
         time.sleep(0.5)
         position = image_search(spell, 0.6)
 
-def next_round(last_spell_used):
+def next_round(last_spell_used, cast_on_player):
     wait_for_image("Pass_Button")
     position = image_search(spell_maker(last_spell_used), 0.6)
     if position != None:
-        print("Something During Battle Occured")
-        print("Attempting To Cast Spell Again")
+        print("Something During Battle Occured...")
+        print("Attempting To Cast Spell Again...")
         spell_click(spell_maker(last_spell_used), 0, 0.7)
+        if cast_on_player == True:
+            cast_on_yourself()
 
 
-def check_for_fizzles(last_spell_used):
+def check_for_fizzles(last_spell_used, cast_on_player):
         time.sleep(1)
         position = image_search(spell_maker("Pass_Button"), 0.6)
         if position != None:
-            next_round(last_spell_used)
+            next_round(last_spell_used, cast_on_player)
 
 def battle_idle():
     print("Waiting For Battle To Start...")
@@ -203,7 +205,7 @@ def victory_Idle(battle_type, last_spell_used):
     Pass_Button = (spell_maker("Pass_Button"))
     position = image_search(Spell_Book, 0.6)
     while position == None:
-        check_for_fizzles(last_spell_used)
+        check_for_fizzles(last_spell_used, last_spell_used)
         time.sleep(1)
         position = image_search(Spell_Book, 0.6)
         time.sleep(1)
@@ -222,8 +224,6 @@ def victory_Idle(battle_type, last_spell_used):
                 position = image_search(Pass_Button, 0.6)
         elif (battle_type == "dungeon_battle"):
             turn_around()
-            exit_dungeon()
-            time.sleep(7)
     print("Next Battle Ready")
         
 def move():
@@ -238,19 +238,20 @@ def turn_around():
     time.sleep(0.27)
     pya.keyUp("a")
 
-def enter_dungeon():
+def enter_dungeon(spell):
     game_click()
     pya.keyDown("x")
     time.sleep(0.95)
     pya.keyUp("x")
     print("Waiting To Enter Dungeon")
-    time.sleep(20)
+    wait_for_image(spell)
 
-def exit_dungeon():
+def exit_dungeon(spell):
     print("Exiting Dungeon...")
     turn_around()
     pya.keyDown("w")
     time.sleep(4)
     pya.keyUp("w")
     print("Waiting...")
-    time.sleep(10)
+    wait_for_image(spell)
+
