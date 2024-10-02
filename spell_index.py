@@ -138,7 +138,7 @@ def aot_Battle(use_Enchanted, enchanted_card, spell_card):
         spell_click(spell_maker(spell_card), 0, 0.6)
 
 #Blades You Twice, Then Cast Orthrus  
-def four_round_battle(enchanted_list, spell_card_list):
+def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate_hitter):
     #enchanted_list[0] = enchant for buff
     #enchanted_list[1] = enchant for spell
     #spell_card_list[0] = first buff
@@ -158,16 +158,78 @@ def four_round_battle(enchanted_list, spell_card_list):
     print("Order Of Spells: " + str(enchanted_spell_list))
     i = 0
     while i < 4:
+        cast_on_player = False
         spell_click(spell_maker(enchanted_spell_list[i]), 0, 0.7)
         if i < 2:
             cast_on_yourself()
+            cast_on_player = True
         if i == 3:
             break
         battle_idle()
-        check_for_fizzles(enchanted_spell_list[i], True)
+        check_for_fizzles(enchanted_spell_list[i], cast_on_player)
         i += 1
+    check_if_dead(alternate_buff, alternate_hitter)
     victory_Idle("dungeon_battle", enchanted_spell_list[-1])
         
+def cast_on_enemy():
+    spell_click(spell_maker("Enemy"), 0, 0.6)
+
+def alternate_attempt(alternate_buff, alternate_hitter):
+    alternate_list = [alternate_buff, alternate_hitter]
+    print("Attempting Alternate Hit")
+    Draw_Button = spell_maker("Draw_Button")
+    position = image_search(Draw_Button, 0.6)
+    if position != None:
+        spell_click(Draw_Button, 0, 0.6)
+        i = 0
+        while i < 2:
+            if check_for_card(alternate_list[i]) == False:
+                spell_click(Draw_Button, 0, 0.6)
+            else:
+                spell_click(spell_maker(alternate_list[i]))
+                if i == 0:
+                    cast_on_yourself()
+                else:
+                    cast_on_enemy()
+    
+
+def Flee_Battle():
+    print("Forced To Flee Battle")
+    Flee_Button = spell_maker("Flee_Button")
+    spell_click(Flee_Button, 0, 0.6)
+    Yes_Button = spell_maker("Yes_Button")
+    spell_click(Yes_Button, 0, 0.6)
+
+def check_for_card(spell):
+    spell = spell_maker(spell)
+    position = image_search(spell, 0.6)
+    if position != None:
+        return False
+
+
+def check_if_dead(alternate_buff, alternate_hitter):
+    Pass_Button = spell_maker("Pass_Button")
+    dead = False
+    Spell_Book = spell_maker("Spell_Book")
+    position = image_search(Pass_Button, 0.6)
+    while position == None:
+        position = image_search(Pass_Button, 0.6)
+        if (position != None):
+            dead = True
+            break
+        time.sleep(1)
+        position = image_search(Spell_Book, 0.6)
+        if (position != None):
+            dead = False
+            break
+        time.sleep(1)
+    if dead == False:
+        print("Enemy Still Isn't Dead")
+        if alternate_buff != "None" and alternate_hitter != "None":
+            alternate_attempt(alternate_buff, alternate_hitter)
+        else:
+            Flee_Battle()
+
 def wait_for_image(image):
     spell = spell_maker(image)
     position = image_search(spell, 0.6)
@@ -178,13 +240,15 @@ def wait_for_image(image):
 
 def next_round(last_spell_used, cast_on_player):
     wait_for_image("Pass_Button")
-    position = image_search(spell_maker(last_spell_used), 0.6)
+    spell = spell_maker(last_spell_used)
+    position = image_search(spell, 0.6)
     if position != None:
         print("Something During Battle Occured...")
         print("Attempting To Cast Spell Again...")
-        spell_click(spell_maker(last_spell_used), 0, 0.7)
+        spell_click(spell, 0, 0.7)
         if cast_on_player == True:
             cast_on_yourself()
+    battle_idle()
 
 
 def check_for_fizzles(last_spell_used, cast_on_player):

@@ -12,6 +12,8 @@ def main():
     spell_card_list.append(input("\033[32m" + "What Is Your First Buff?: " + "\033[0m"))
     spell_card_list.append(input("\033[32m" + "What Is Your Second Buff?: " + "\033[0m"))
     spell_card_list.append(input("\033[32m" + "What Is Your Third Buff?: " + "\033[0m"))
+    alternate_buff = input("\033[32m" + "(Optional) Do You Want To Add An Alternate Buff?: " + "\033[0m")
+    alternate_hitter = input("\033[32m" + "(Optional) Do You Want To Add An Alternate Hitter?: " + "\033[0m")
     enchanted_list.append("Sharpened_Blade")
 
     print("\033[33m" + "Make Sure You Are Standing In Front Of The Sigil")
@@ -24,14 +26,17 @@ def main():
     time.sleep(1)
     print("\033[0m")
 
-    loremaster_run(enchanted_list, spell_card_list)
+    loremaster_run(enchanted_list, spell_card_list, alternate_buff, alternate_hitter)
 
-def loremaster_run(enchanted_list, spell_card_list):
+def loremaster_run(enchanted_list, spell_card_list, alternate_buff, alternate_hitter):
+    attempt = 0
     while True:
+        attempt += 1
+        print("\033[33m" + "Attempt Number: " + str(attempt) + "\033[0m")
         farm.game_click()
         farm.enter_dungeon("Loremaster_Banner")
         farm.move()
-        farm.four_round_battle(enchanted_list, spell_card_list)
+        farm.four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate_hitter)
         farm.exit_dungeon("Dragonspyre_Floor_Pattern")
         pya.keyDown("s")
         time.sleep(0.5)
