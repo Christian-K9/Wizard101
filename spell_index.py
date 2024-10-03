@@ -229,6 +229,8 @@ def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
             alternate_attempt(alternate_buff, alternate_hitter)
         else:
             Flee_Battle()
+    if dead == True:
+        victory_Idle()
 
 def wait_for_image(image):
     spell = spell_maker(image)
@@ -253,8 +255,9 @@ def next_round(last_spell_used, cast_on_player, alternate_buff, alternate_hitter
         spell_click(spell, 0, 0.7)
         if cast_on_player == True:
             cast_on_yourself()
-    if position == None and no_more_cards(enchanted_spell_list, alternate_buff, alternate_hitter):
+    elif position == None and no_more_cards(enchanted_spell_list, alternate_buff, alternate_hitter):
         alternate_attempt(alternate_buff, alternate_hitter)
+        check_if_dead()
     Pass_Button = spell_maker("Pass_Button")
     Spell_Book = spell_maker("Spell_Book")
     position = image_search(Pass_Button, 0.6)
