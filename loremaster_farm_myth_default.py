@@ -11,7 +11,7 @@ spell_card_list.append("Spirit_Blade")
 spell_card_list.append("Frenzy")
 enchanted_list.append("Sharpened_Blade")
 alternate_buff = ("Myth_Blade_Treasure_Card")
-alternate_hitter = ("War_Helephant_Treasure_Card")
+alternate_hitter = ("Otomo_Fury_Treasure_Card")
 
 print("\033[33m" + "Default Spells Used: ")
 print("Spell Card List " + str(spell_card_list))

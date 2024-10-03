@@ -32,7 +32,6 @@ def check_keys():
                     keys_state[key]['pressed_at'] = time.time()
                     log_event(key, "Pressed")
                     pressed_time = time.time()
-                    print("Time Difference: " + str(pressed_time - last_movement))
                     last_movement = pressed_time
             else:
                 if keys_state[key]['pressed']:  # Key was pressed before, now it's released
@@ -41,7 +40,6 @@ def check_keys():
                     duration = released_at - keys_state[key]['pressed_at']
                     log_event(key, "Released", duration)
                     released_time = time.time()
-                    print("Time Difference: " + str(released_time - last_movement))
                     last_movement = released_time
         # Small delay to prevent CPU overload
         time.sleep(0.01)
