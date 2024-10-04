@@ -34,4 +34,4 @@ if __name__ == "__main__":
 def aot_run(use_Enchanted, enchanted_card, spell_card):
     while True:
         aot.aot_Battle(use_Enchanted, enchanted_card, spell_card)
-        aot.victory_Idle("aot_battle", spell_card, None, None, None)
+        aot.victory_Idle("aot_battle")
