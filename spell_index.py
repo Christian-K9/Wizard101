@@ -168,7 +168,7 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
         battle_idle()
         check_for_fizzles(enchanted_spell_list[i], cast_on_player, alternate_buff, alternate_hitter, enchanted_spell_list)
         i += 1
-    check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter)
+    check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter, enchanted_spell_list[i])
     victory_Idle("dungeon_battle", enchanted_spell_list[-1], alternate_buff, alternate_hitter, enchanted_spell_list)
         
 def cast_on_enemy():
@@ -207,7 +207,7 @@ def check_for_card(spell):
         return False
 
 
-def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
+def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter, last_spell_used):
     Pass_Button = spell_maker("Pass_Button")
     dead = False
     Spell_Book = spell_maker("Spell_Book")
@@ -230,7 +230,7 @@ def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
         else:
             Flee_Battle()
     if dead == True:
-        victory_Idle()
+        victory_Idle("dungeon_battle", last_spell_used, alternate_buff, alternate_hitter, enchanted_spell_list)
 
 def wait_for_image(image):
     spell = spell_maker(image)
@@ -257,7 +257,7 @@ def next_round(last_spell_used, cast_on_player, alternate_buff, alternate_hitter
             cast_on_yourself()
     elif position == None and no_more_cards(enchanted_spell_list, alternate_buff, alternate_hitter):
         alternate_attempt(alternate_buff, alternate_hitter)
-        check_if_dead()
+        check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter, last_spell_used)
     Pass_Button = spell_maker("Pass_Button")
     Spell_Book = spell_maker("Spell_Book")
     position = image_search(Pass_Button, 0.6)
@@ -275,7 +275,7 @@ def next_round(last_spell_used, cast_on_player, alternate_buff, alternate_hitter
 
 def check_for_fizzles(last_spell_used, cast_on_player, alternate_buff, alternate_hitter, enchanted_spell_list):
         time.sleep(1)
-        print("Checking For Fizzes")
+        print("Checking For Fizzles")
         position = image_search(spell_maker("Pass_Button"), 0.6)
         if position != None:
             next_round(last_spell_used, cast_on_player, alternate_buff, alternate_hitter, enchanted_spell_list)
