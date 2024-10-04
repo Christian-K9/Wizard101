@@ -14,10 +14,12 @@ alternate_buff = ("Myth_Blade_Treasure_Card")
 alternate_hitter = ("Otomo_Fury_Treasure_Card")
 
 print("\033[33m" + "Default Spells Used: ")
-print("Spell Card List " + str(spell_card_list))
-print("Enchanted Spell List " + str(enchanted_list))
-print("Alternate Buff: " + alternate_buff)
-print("Alternate Hitter: " + alternate_hitter)
+print("     Spell Card List " + str(spell_card_list))
+print("     Enchanted Spell List " + str(enchanted_list))
+print("     Alternate Buff: " + alternate_buff)
+print("     Alternate Hitter: " + alternate_hitter)
+
+time.sleep(5)
 
 print("\033[33m" + "Make Sure You Are Standing In Front Of The Sigil")
 time.sleep(1)
