@@ -170,10 +170,15 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
         i += 1
     check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter)
     victory_Idle("dungeon_battle", enchanted_spell_list[-1], alternate_buff, alternate_hitter, enchanted_spell_list)
-        
-def cast_on_enemy():
-    spell_click(spell_maker("Enemy"), 0, 0.6)
 
+def locate_enemy():
+    enemy = "enemy"
+    for i in range(5):
+        spell = spell_maker(enemy + str(i))
+        position = image_search(spell)
+        if position != None:
+            spell_click(spell)
+    
 def alternate_attempt(alternate_buff, alternate_hitter):
     alternate_list = [alternate_buff, alternate_hitter]
     print("Attempting Alternate Hit")
@@ -190,7 +195,7 @@ def alternate_attempt(alternate_buff, alternate_hitter):
                 if i == 0:
                     cast_on_yourself()
                 else:
-                    cast_on_enemy()
+                    locate_enemy()
     
 
 def Flee_Battle():
