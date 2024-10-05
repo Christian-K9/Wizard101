@@ -13,7 +13,7 @@ import random
 def exit_game():
     sys.exit()
 
-keyboard.add_hotkey('q', exit_game())
+keyboard.add_hotkey('q', exit_game)
 # Function to search for an image on the screen
 def image_search(image_path, theshold):
     screen = pya.screenshot()
@@ -79,14 +79,22 @@ def spell_maker(spell):
     current_dir = os.getcwd()
     spell = spell + ".png"
     spell_path = os.path.join(current_dir, "Spell_Folder", spell)
-    print("Current Directory Of Image: " + str(spell_path))
     if not os.path.exists(spell_path):
         print("\033[31m" + "Image Not Not Found: " + spell_path + "\033[0m")
         print("Make Sure Images Are In 'Spell_Folder' Files")
         sys.exit()
     return spell_path
 
-def spell_click(spell, attempt, threshold):
+def spell_click(spell, attempt, threshold, cast):
+    if cast == True:
+      new_spell = "Wizard101\\Spell_Folder\\"
+      position = spell.find(new_spell)
+      spell_casting = spell[position + len(new_spell):]
+      spell_casting = spell_casting[0:len(spell_casting) - 3]
+      
+      if position != -1:  # If the spell is found in the string
+        print("Attempting To Cast " + str(spell_casting))
+
     position = image_search(spell, threshold)
     if position != [-1, -1] and position != None:
         x, y = position
@@ -101,7 +109,7 @@ def spell_click(spell, attempt, threshold):
             scroll_and_search(spell)
         else:
             attempt += 1
-            spell_click(spell, attempt, threshold)
+            spell_click(spell, attempt, threshold, cast)
 
 def game_click():
     position = image_search(spell_maker("Spell_Book"), 0.6)
@@ -117,22 +125,23 @@ def game_click():
 
 def enchant_card(enchanted, spell):
     print("Attempting To Enchant " + str(enchanted) + " With " + str(spell) + "...")
-    spell_click(spell_maker(enchanted), 0, 0.6)
+    spell_click(spell_maker(enchanted), 0, 0.6, False)
     time.sleep(0.5)
-    spell_click(spell_maker(spell), 0, 0.6)
+    spell_click(spell_maker(spell), 0, 0.6, False)
     time.sleep(0.5)
 
 def cast_on_yourself():
-    spell_click(spell_maker("Yourself"), 0, 0.8)
+    spell_click(spell_maker("Yourself"), 0, 0.8, False)
     
 def identifyEnemies():
     counter = 0
     enemy = "Enemy"
-    for i in range(5):
-        position = image_search(spell_maker(enemy + str(i)))
+    for i in range(1, 5):
+        position = image_search(spell_maker(enemy + str(i)), 0.6)
         if position != None:
             counter += 1
-    print("There Are " + str(counter) + " Enemies In Batte")
+    print("There Are " + str(counter) + " Enemies In Battle")
+    print()
 
 def aot_Battle(use_Enchanted, enchanted_card, spell_card):
     identifyEnemies()
@@ -163,11 +172,19 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
     enchanted_spell_list.append(spell_card_list[3])
     enchanted_spell_list.append((enchanted_list[0] + "_Enchanted_" + spell_card_list[0]))
 
-    print("Order Of Spells Being Cast: " + str(enchanted_spell_list))
+    print("Order Of Spells Being Cast: ")
+    counter = 0
+    for i in enchanted_spell_list:
+        counter += 1
+        print("     " + str(counter) + ". " + str(i))
+
+    print()
+    time.sleep(1)
+
     i = 0
     while i < 4:
         cast_on_player = False
-        spell_click(spell_maker(enchanted_spell_list[i]), 0, 0.7)
+        spell_click(spell_maker(enchanted_spell_list[i]), 0, 0.7, True)
         if i < 2:
             cast_on_yourself()
             cast_on_player = True
@@ -176,14 +193,15 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
         battle_idle()
         check_for_fizzles(enchanted_spell_list[i], cast_on_player,)
         i += 1
+    check_for_fizzles(enchanted_spell_list[i], cast_on_player,)
     check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter)
     victory_Idle("dungeon_battle")
         
 def cast_on_enemy():
-    for i in range(5):
-        position = image_search(spell_maker("Enemy" + i))
+    for i in range(1, 5):
+        position = image_search(spell_maker("Enemy" + str(i)), 0.6)
         if position != None:
-            spell_click(position, 0, 0.6)
+            spell_click(position, 0, 0.6, False)
 
 def alternate_attempt(alternate_buff, alternate_hitter):
     alternate_list = [alternate_buff, alternate_hitter]
@@ -191,14 +209,15 @@ def alternate_attempt(alternate_buff, alternate_hitter):
     Draw_Button = spell_maker("Draw_Button")
     position = image_search(Draw_Button, 0.6)
     if position != None:
-        spell_click(Draw_Button, 0, 0.6)
+        spell_click(Draw_Button, 0, 0.6, False)
         i = 0
         #Clicks the draw button until the buff shows up
         while i < 2:
             if check_for_card(alternate_list[i]) == False:
-                spell_click(Draw_Button, 0, 0.6)
+                print("Drawing Card...")
+                spell_click(Draw_Button, 0, 0.6, False)
             else:
-                spell_click(spell_maker(alternate_list[i]), 0, 0.7)
+                spell_click(spell_maker(alternate_list[i]), 0, 0.7, True)
                 i += 1
                 if i == 0:
                     cast_on_yourself()
@@ -222,6 +241,7 @@ def check_for_card(spell):
 
 
 def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
+    print("Checking If Enemy Is Dead...")
     Pass_Button = spell_maker("Pass_Button")
     dead = False
     Spell_Book = spell_maker("Spell_Book")
@@ -262,18 +282,19 @@ def no_more_cards(enchanted_spell_list):
 
 def check_for_fizzles(last_spell_used, cast_on_player):
         time.sleep(1)
-        print("Checking For Fizzles")
+        print("Checking For Fizzles...")
         spell = spell_maker(last_spell_used)
         position = image_search(spell, 0.6)
         if position != None:
             print("Something During Battle Occured...")
             print("Attempting To Cast Spell Again...")
-            spell_click(spell, 0, 0.7)
+            spell_click(spell, 0, 0.7, True)
             if cast_on_player == True:
                 cast_on_yourself()
+            battle_idle()
 
 def battle_idle():
-    print("Waiting For Battle To Start...")
+    print("Waiting For Next Round...")
     wait_for_image("Pass_Button")
 
 def aot_victory():
@@ -295,7 +316,7 @@ def victory_Idle(battle_type):
         aot_victory()
 
     elif (battle_type == "dungeon_battle"):
-            exit_dungeon()
+            exit_loremaster_dungeon()
         
 def move():
     time.sleep(0.1)
@@ -314,14 +335,15 @@ def enter_dungeon(spell):
     pya.keyDown("x")
     time.sleep(0.95)
     pya.keyUp("x")
-    print("Waiting To Enter Dungeon")
+    print("Waiting To Enter Dungeon...")
     wait_for_image(spell)
 
-def exit_dungeon(spell):
+def exit_loremaster_dungeon():
     print("Exiting Dungeon...")
+    turn_around()
     turn_around()
     pya.keyDown("w")
     time.sleep(4)
     pya.keyUp("w")
     print("Waiting...")
-    wait_for_image(spell)
+    wait_for_image("Dragonspyre_Floor_Pattern")
