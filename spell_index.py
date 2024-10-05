@@ -90,6 +90,7 @@ def spell_click(spell, attempt, threshold, cast):
       new_spell = "Wizard101\\Spell_Folder\\"
       position = spell.find(new_spell)
       spell_casting = spell[position + len(new_spell):]
+      spell_casting = spell_casting[0:len(spell_casting) - 3]
       
       if position != -1:  # If the spell is found in the string
         print("Attempting To Cast " + str(spell_casting))
@@ -172,8 +173,10 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
     enchanted_spell_list.append((enchanted_list[0] + "_Enchanted_" + spell_card_list[0]))
 
     print("Order Of Spells Being Cast: ")
+    counter = 0
     for i in enchanted_spell_list:
-        print("     " + str(i))
+        counter += 1
+        print("     " + str(counter) + ". " + str(i))
 
     print()
     time.sleep(1)
@@ -190,14 +193,15 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
         battle_idle()
         check_for_fizzles(enchanted_spell_list[i], cast_on_player,)
         i += 1
+    check_for_fizzles(enchanted_spell_list[i], cast_on_player,)
     check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter)
     victory_Idle("dungeon_battle")
         
 def cast_on_enemy():
-    for i in range(5):
+    for i in range(1, 5):
         position = image_search(spell_maker("Enemy" + str(i)), 0.6)
         if position != None:
-            spell_click(position, 0, 0.6)
+            spell_click(position, 0, 0.6, False)
 
 def alternate_attempt(alternate_buff, alternate_hitter):
     alternate_list = [alternate_buff, alternate_hitter]
