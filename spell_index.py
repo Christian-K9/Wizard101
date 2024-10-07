@@ -193,15 +193,16 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
         battle_idle()
         check_for_fizzles(enchanted_spell_list[i], cast_on_player,)
         i += 1
+    check_for_fizzles(enchanted_spell_list[i], cast_on_player,)
     check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter)
     victory_Idle("dungeon_battle")
         
 def cast_on_enemy():
     for i in range(1, 5):
-        spell = spell_maker("Enemy" + str(i))
-        position = image_search(spell, 0.6)
+        enemy = spell_maker("Enemy" + str(i))
+        position = image_search(enemy, 0.6)
         if position != None:
-            spell_click(spell, 0, 0.6, False)
+            spell_click(enemy, 0, 0.6, False)
 
 def alternate_attempt(alternate_buff, alternate_hitter):
     alternate_list = [alternate_buff, alternate_hitter]
@@ -218,20 +219,20 @@ def alternate_attempt(alternate_buff, alternate_hitter):
                 spell_click(Draw_Button, 0, 0.6, False)
             else:
                 spell_click(spell_maker(alternate_list[i]), 0, 0.7, True)
-                i += 1
                 if i == 0:
                     cast_on_yourself()
                 else:
                     cast_on_enemy()
-                    battle_idle()
+                i += 1
+                battle_idle()
     
 
 def Flee_Battle():
     print("Forced To Flee Battle")
     Flee_Button = spell_maker("Flee_Button")
-    spell_click(Flee_Button, 0, 0.6, False)
+    spell_click(Flee_Button, 0, 0.6)
     Yes_Button = spell_maker("Yes_Button")
-    spell_click(Yes_Button, 0, 0.6, False)
+    spell_click(Yes_Button, 0, 0.6)
 
 def check_for_card(spell):
     spell = spell_maker(spell)
@@ -251,20 +252,20 @@ def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
         position = image_search(Pass_Button, 0.6)
         if (position != None):
             dead = False
+            break
         time.sleep(1)
         position = image_search(Spell_Book, 0.6)
         if (position != None):
             dead = True
-            exit
+            break
         time.sleep(1)
-    print("Enemy Still Isn't Dead")
-    if (((alternate_buff == None) or (alternate_hitter == None)) and (no_more_cards(enchanted_spell_list)) and (dead == False)):
-        Flee_Battle()
-    elif (dead == False) and (no_more_cards(enchanted_spell_list) == True):
+    if dead == False:
+        print("Enemy Still Isn't Dead")
         alternate_attempt(alternate_buff, alternate_hitter)
-    elif no_more_cards == False:
-        spell_click(spell_maker(enchanted_spell_list[-1]))
-        check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter)
+        if alternate_buff != "None" and alternate_hitter != "None" and no_more_cards(enchanted_spell_list):
+            alternate_attempt(alternate_buff, alternate_hitter)
+        else:
+            Flee_Battle()
 
 def wait_for_image(image):
     spell = spell_maker(image)
@@ -278,22 +279,23 @@ def no_more_cards(enchanted_spell_list):
     position = image_search(spell_maker(enchanted_spell_list[-1]), 0.6)
     if position == None:
         print("There Are No More Cards")
-        return True
-    else:
-        return False
+        True
 
 def check_for_fizzles(last_spell_used, cast_on_player):
         time.sleep(1)
         print("Checking For Fizzles...")
         spell = spell_maker(last_spell_used)
         position = image_search(spell, 0.6)
-        if position != None:
+        if position == None:
+            exit
+        elif position != None:
             print("Something During Battle Occured...")
             print("Attempting To Cast Spell Again...")
             spell_click(spell, 0, 0.7, True)
             if cast_on_player == True:
                 cast_on_yourself()
             battle_idle()
+            check_for_fizzles(last_spell_used, cast_on_player)
 
 def battle_idle():
     print("Waiting For Next Round...")
