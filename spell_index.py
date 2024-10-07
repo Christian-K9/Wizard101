@@ -199,9 +199,10 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
         
 def cast_on_enemy():
     for i in range(1, 5):
-        position = image_search(spell_maker("Enemy" + str(i)), 0.6)
+        enemy = spell_maker("Enemy" + str(i))
+        position = image_search(enemy, 0.6)
         if position != None:
-            spell_click(position, 0, 0.6, False)
+            spell_click(enemy, 0, 0.6, False)
 
 def alternate_attempt(alternate_buff, alternate_hitter):
     alternate_list = [alternate_buff, alternate_hitter]
@@ -218,12 +219,12 @@ def alternate_attempt(alternate_buff, alternate_hitter):
                 spell_click(Draw_Button, 0, 0.6, False)
             else:
                 spell_click(spell_maker(alternate_list[i]), 0, 0.7, True)
-                i += 1
                 if i == 0:
                     cast_on_yourself()
                 else:
                     cast_on_enemy()
-                    battle_idle()
+                i += 1
+                battle_idle()
     
 
 def Flee_Battle():
@@ -285,13 +286,16 @@ def check_for_fizzles(last_spell_used, cast_on_player):
         print("Checking For Fizzles...")
         spell = spell_maker(last_spell_used)
         position = image_search(spell, 0.6)
-        if position != None:
+        if position == None:
+            exit
+        elif position != None:
             print("Something During Battle Occured...")
             print("Attempting To Cast Spell Again...")
             spell_click(spell, 0, 0.7, True)
             if cast_on_player == True:
                 cast_on_yourself()
             battle_idle()
+            check_for_fizzles(last_spell_used, cast_on_player)
 
 def battle_idle():
     print("Waiting For Next Round...")
