@@ -257,15 +257,24 @@ def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
         position = image_search(Spell_Book, 0.6)
         if (position != None):
             dead = True
-            break
+            exit
         time.sleep(1)
-    if dead == False:
-        print("Enemy Still Isn't Dead")
+
+    
+    # If They are dead and the spell the last spell is still in the deck
+    if ((no_more_cards(enchanted_spell_list == False)) and (dead == False)):
+        spell_click(spell_maker(enchanted_spell_list[-1]), 0, 0.6)
+        check_for_fizzles(enchanted_spell_list[-1], False)
+
+    # If they're not dead and theres buffs and hitters in the alternates loaded
+    elif ((dead == False) and (alternate_buff != "None") or (alternate_hitter != "None")) and (no_more_cards(enchanted_spell_list)):
         alternate_attempt(alternate_buff, alternate_hitter)
-        if alternate_buff != "None" and alternate_hitter != "None" and no_more_cards(enchanted_spell_list):
-            alternate_attempt(alternate_buff, alternate_hitter)
-        else:
-            Flee_Battle()
+
+    # If they're not dead and theres no more cards in the deck
+    elif (dead == False) and (no_more_cards(enchanted_spell_list) == True):
+        print("Enemy Still Isn't Dead")
+        print("Forced To Flee")
+        Flee_Battle()
 
 def wait_for_image(image):
     spell = spell_maker(image)
