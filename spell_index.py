@@ -20,21 +20,18 @@ def image_search(image_path, theshold):
     screen_np = np.array(screen)
     screen_gray = cv2.cvtColor(screen_np, cv2.COLOR_RGB2GRAY)
 
-    # Load the target image
     template = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     w, h = template.shape[::-1]
 
-    # Perform template matching
     result = cv2.matchTemplate(screen_gray, template, cv2.TM_CCOEFF_NORMED)
     loc = np.where(result >= theshold)  # Adjust the threshold as necessary
 
     if loc[0].size > 0:
-        # Get the center point of the found image
         x = loc[1][0] + w // 2
         y = loc[0][0] + h // 2
-        return (x, y)  # Return the center coordinates
+        return (x, y)
     else:
-        return None  # Image not found
+        return None
 
 # Scroll across screen if image isn't found
 
@@ -223,6 +220,7 @@ def alternate_attempt(alternate_buff, alternate_hitter):
                     cast_on_yourself()
                 else:
                     cast_on_enemy()
+                    exit
                 i += 1
                 battle_idle()
     
@@ -260,21 +258,21 @@ def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
             exit
         time.sleep(1)
 
-    
     # If They are dead and the spell the last spell is still in the deck
-    if ((no_more_cards(enchanted_spell_list == False)) and (dead == False)):
+    if ((no_more_cards(enchanted_spell_list) == False) and (dead == False)):
         spell_click(spell_maker(enchanted_spell_list[-1]), 0, 0.6)
         check_for_fizzles(enchanted_spell_list[-1], False)
 
     # If they're not dead and theres buffs and hitters in the alternates loaded
-    elif ((dead == False) and (alternate_buff != "None") or (alternate_hitter != "None")) and (no_more_cards(enchanted_spell_list)):
+    elif (dead == False)  and (no_more_cards(enchanted_spell_list) == True):
         alternate_attempt(alternate_buff, alternate_hitter)
 
     # If they're not dead and theres no more cards in the deck
     elif (dead == False) and (no_more_cards(enchanted_spell_list) == True):
         print("Enemy Still Isn't Dead")
-        print("Forced To Flee")
         Flee_Battle()
+    
+    print("All False")
 
 def wait_for_image(image):
     spell = spell_maker(image)
@@ -287,8 +285,7 @@ def wait_for_image(image):
 def no_more_cards(enchanted_spell_list):
     position = image_search(spell_maker(enchanted_spell_list[-1]), 0.6)
     if position == None:
-        print("There Are No More Cards")
-        True
+        return True
 
 def check_for_fizzles(last_spell_used, cast_on_player):
         time.sleep(1)
