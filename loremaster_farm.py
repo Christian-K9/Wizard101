@@ -2,6 +2,8 @@
 import spell_index as farm
 import time
 import pyautogui as pya
+import keyboard
+
 
 def main():
     enchanted_list = []

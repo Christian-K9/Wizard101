@@ -223,6 +223,7 @@ def alternate_attempt(alternate_buff, alternate_hitter):
                     exit
                 i += 1
                 battle_idle()
+        check_if_dead(alternate_hitter, alternate_buff, alternate_hitter)
     
 
 def Flee_Battle():
@@ -260,6 +261,8 @@ def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
 
     # If They are dead and the spell the last spell is still in the deck
     if ((no_more_cards(enchanted_spell_list) == False) and (dead == False)):
+        print("Something During Battle Occured...")
+        print("Attempting To Cast Spell Again...")
         spell_click(spell_maker(enchanted_spell_list[-1]), 0, 0.6)
         check_for_fizzles(enchanted_spell_list[-1], False)
 
@@ -272,8 +275,6 @@ def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
         print("Enemy Still Isn't Dead")
         Flee_Battle()
     
-    print("All False")
-
 def wait_for_image(image):
     spell = spell_maker(image)
     position = image_search(spell, 0.6)
@@ -286,6 +287,8 @@ def no_more_cards(enchanted_spell_list):
     position = image_search(spell_maker(enchanted_spell_list[-1]), 0.6)
     if position == None:
         return True
+    else:
+        return False
 
 def check_for_fizzles(last_spell_used, cast_on_player):
         time.sleep(1)
