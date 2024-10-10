@@ -218,16 +218,16 @@ def alternate_attempt(alternate_buff, alternate_hitter):
                 spell_click(spell_maker(alternate_list[i]), 0, 0.7, True)
                 if i == 0:
                     cast_on_yourself()
+                    battle_idle()
                 else:
                     cast_on_enemy()
                     exit
                 i += 1
-                battle_idle()
         check_if_dead(alternate_hitter, alternate_buff, alternate_hitter)
     
 
 def Flee_Battle():
-    print("Forced To Flee Battle")
+    print("\033[31m" + "Forced To Flee Battle" + "\033[0m")
     Flee_Button = spell_maker("Flee_Button")
     spell_click(Flee_Button, 0, 0.6)
     Yes_Button = spell_maker("Yes_Button")
@@ -263,16 +263,17 @@ def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
     if ((no_more_cards(enchanted_spell_list) == False) and (dead == False)):
         print("Something During Battle Occured...")
         print("Attempting To Cast Spell Again...")
-        spell_click(spell_maker(enchanted_spell_list[-1]), 0, 0.6)
+        spell_click(spell_maker(enchanted_spell_list[-1]), 0, 0.6, True)
         check_for_fizzles(enchanted_spell_list[-1], False)
 
     # If they're not dead and theres buffs and hitters in the alternates loaded
     elif (dead == False)  and (no_more_cards(enchanted_spell_list) == True):
+        print("\033[31m" + "Enemy Still Isn't Dead" + "\033[0m")
         alternate_attempt(alternate_buff, alternate_hitter)
 
     # If they're not dead and theres no more cards in the deck
     elif (dead == False) and (no_more_cards(enchanted_spell_list) == True):
-        print("Enemy Still Isn't Dead")
+        print("\033[31m" + "Enemy Still Isn't Dead" + "\033[0m")
         Flee_Battle()
     
 def wait_for_image(image):
@@ -298,7 +299,7 @@ def check_for_fizzles(last_spell_used, cast_on_player):
         if position == None:
             exit
         elif position != None:
-            print("Something During Battle Occured...")
+            print("\033[31m" + "Something During Battle Occured..." + "\033[0m")
             print("Attempting To Cast Spell Again...")
             spell_click(spell, 0, 0.7, True)
             if cast_on_player == True:
