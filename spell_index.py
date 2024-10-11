@@ -219,6 +219,7 @@ def alternate_attempt(alternate_buff, alternate_hitter):
                 if i == 0:
                     cast_on_yourself()
                     battle_idle()
+                    check_for_fizzles(alternate_list[i], True)
                 else:
                     cast_on_enemy()
                     exit
