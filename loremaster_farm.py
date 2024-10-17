@@ -35,7 +35,7 @@ def loremaster_run(enchanted_list, spell_card_list, alternate_buff, alternate_hi
     while True:
         attempt += 1
         farm.wait_for_image("Spell_Book")
-        print("\033[33m" + "Attempt Number: " + str(attempt) + "\033[0m")
+        farm.print_cool_way("\033[33m" + "Attempt Number: " + str(attempt) + "\033[0m")
         farm.game_click()
         farm.enter_dungeon("Loremaster_Banner")
         farm.move()

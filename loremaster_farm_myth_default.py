@@ -1,4 +1,5 @@
 import loremaster_farm as farm
+import spell_index as si
 import time
 
 spell_card_list = []
@@ -11,22 +12,36 @@ spell_card_list.append("Spirit_Blade")
 spell_card_list.append("Frenzy")
 enchanted_list.append("Sharpened_Blade")
 alternate_buff = ("Myth_Blade_Treasure_Card")
-alternate_hitter = ("Otomo_Fury_Treasure_Card")
+alternate_hitter = ("Stone_Colossus_Treasure_Card")
 
-print("\033[33m" + "Default Spells Used: ")
-print("     Spell Card List: " + str(spell_card_list))
-print("     Enchanted Spell List: " + str(enchanted_list))
-print("     Alternate Buff: " + alternate_buff)
-print("     Alternate Hitter: " + alternate_hitter)
+def print_card_list(card_list):
+    counter = 0
+    for card in card_list:
+        counter += 1
+        si.print_cool_way("         " + str(counter) + "." + card)
 
+si.print_cool_way("\033[33m" + "Now Using Default Myth Loremaster Farm...")
+print()
+time.sleep(3)
+si.print_cool_way("Default Spells Used: ")
+si.print_cool_way("     Spell Card List: ")
+print_card_list(spell_card_list)
+time.sleep(3)
+si.print_cool_way("     Enchanted Spell List:")
+print_card_list(spell_card_list)
+time.sleep(3)
+si.print_cool_way("     Alternate Buff: " + alternate_buff)
+si.print_cool_way("     Alternate Hitter: " + alternate_hitter)
+print()
 time.sleep(5)
 
-print("\033[33m" + "Make Sure You Are Standing In Front Of The Sigil")
+si.print_cool_way("\033[33m" + "Make Sure You Are Standing In Front Of The Sigil")
 time.sleep(1)
-print("Getting Ready In 10...")
+si.print_cool_way("Getting Ready In 10...")
+time.sleep(1)
 i = 9
 while i > 0:
-    print(str(i) + "...")
+    print(str(i))
     i -= 1
     time.sleep(1)
 print("\033[0m")

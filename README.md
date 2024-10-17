@@ -18,6 +18,7 @@ Screen Must Be At Max Brightness
 aot_farm.py rules:
     -must have all spells your using in "Spell_Folder" File
     -must start by standing in front of enemies
+    -must have mount with at least 40% speed equipped
 
 loremaster_farm.py rules:
     -must have all spells your using in "Spell_Folder" File

@@ -16,22 +16,28 @@ def main():
     aot_run(use_Enchanted, enchanted_card, spell_card)
 
 
-print("\033[33m" + "Make Sure You Are Standing In Front Of Enemies")
-print("Getting Ready In 10...")
-i = 9
-while i > 0:
-    print(str(i) + "...")
-    i -= 1
-    time.sleep(1)
-print("\033[0m")
-
-aot.game_click()
-aot.move()
-
 if __name__ == "__main__":
     main()
 
 def aot_run(use_Enchanted, enchanted_card, spell_card):
+    aot.print_cool_way("\033[33m" + "Make Sure You Are Standing In Front Of Enemies")
+    aot.print_cool_way("Getting Ready In 5...")
+    time.sleep(1)
+    i = 4
+    while i > 0:
+        print(str(i) + "...")
+        i -= 1
+        time.sleep(1)
+    print("\033[0m")
+
+    aot.game_click()
+    aot.move()
+    attempt = 0
+    seconds = time.time()
     while True:
+        attempt += 1
+        seconds_passed = time.time()
+        aot.print_cool_way("Seconds Passed: " + str(int(seconds_passed - seconds)))
+        aot.print_cool_way("\033[33m" + "Attempt Number: " + str(attempt) + "\033[0m")
         aot.aot_Battle(use_Enchanted, enchanted_card, spell_card)
         aot.victory_Idle("aot_battle")
