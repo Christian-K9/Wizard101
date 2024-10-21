@@ -1,14 +1,27 @@
 import spell_index as si
+import pyautogui as pya
 import time
 
-a = time.time()
-print("a:" + str(a))
-
 time.sleep(3)
+pya.keyDown("A")
+time.sleep(0.01)
+pya.keyUp("A")
+time.sleep(1)
+pya.keyDown("W")
+time.sleep(4)
+pya.keyUp("W")
+time.sleep(1)
+pya.keyDown("D")
+time.sleep(0.15)
+pya.keyUp("D")
+time.sleep(1)
+pya.keyDown("W")
+time.sleep(1.57)
+pya.keyUp("W")
+time.sleep(1.5)
+pya.keyDown("X")
+time.sleep(0.5)
+pya.keyUp("X")
+time.sleep(1)
 
-b = time.time()
-print("b:" + str(b))
-
-print("a - b: " + (int(a - b)))
-
-
+si.spell_click(si.spell_maker("Go_In_Button"), 0, 0.7, False)

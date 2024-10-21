@@ -49,9 +49,25 @@ def image_search(image_path, theshold):
     else:
         return None
 
+#\033[0m – Reset (default color)
+#\033[30m – Black
+#\033[31m – Red
+#\033[32m – Green
+#\033[33m – Yellow
+#\033[34m – Blue
+#\033[35m – Magenta
+#\033[36m – Cyan
+#\033[37m – White
+def color_maker(color):
+    colors = ["Black", "Red", "Green", "Yellow", "Blue", "Magenta", "Cyan", "White"]
+    index = 0
+    while index < len(colors):
+        if color == "default":
+            return "\033[0m"
+        elif color == colors[index]:
+            return "\033[3" + str(index) + "m"
+        index += 1
 # Scroll across screen if image isn't found
-
-
 def scroll_and_search(spell):
     position = None
     x = 0
@@ -132,6 +148,15 @@ def spell_click(spell, attempt, threshold, cast):
             attempt += 1
             
             spell_click(spell, attempt, threshold, cast)
+
+def discard_card(spell):
+    position = image_search(spell_maker(spell), 0.6)
+    if position != None:
+        x, y = position
+        pya.moveTo(x, y, 1, pya.easeOutQuad)
+        pya.click(button="right")
+        time.sleep(1)
+        pya.moveTo(x, y - 100, 1, pya.easeOutQuad)
 
 def game_click():
     position = image_search(spell_maker("Spell_Book"), 0.6)
@@ -231,8 +256,9 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
         
 def cast_on_enemy():
     print_cool_way("Casting Spell On Enemy...")
-    for i in range(1, 5):
-        enemy = spell_maker("Enemy" + str(i))
+    enemies = ["dagger", "key", "gem", "spiral"]
+    for i in enemies:
+        enemy = spell_maker(i)
         position = image_search(enemy, 0.6)
         if position != None:
             spell_click(enemy, 0, 0.6, False)
@@ -274,9 +300,11 @@ def Flee_Battle():
 
 def check_for_card(spell):
     spell = spell_maker(spell)
-    position = image_search(spell, 0.6)
+    position = image_search(spell, 0.9)
     if position == None:
         return False
+    elif position != None:
+        return True
 
 
 def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
