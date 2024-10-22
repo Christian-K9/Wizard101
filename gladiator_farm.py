@@ -171,7 +171,7 @@ def check_player_stats():
         y = int(y)
         pya.moveTo(x, y, 0.5, pya.easeOutQuad)
 
-def check_for_negatives():
+def check_for_negatives(last_round):
     check_player_stats()
     if (si.check_for_card("Gladiator_Negative_Blade") == True) and (si.check_for_card("Draw_Button") == True):
         Cleanse_Charm = si.check_for_card("Cleanse_Charm")
@@ -187,14 +187,16 @@ def check_for_negatives():
         si.spell_click(si.spell_maker("Cleanse_Charm"), 0, 0.6, True)
         si.cast_on_yourself()
         si.battle_idle()
-        check_for_negatives()
+        check_for_negatives(last_round)
     elif (si.check_for_card("Gladiator_Negative_Blade") == True) and (si.check_for_card("Draw_Button") == False):
         si.discard_card("Shatter")
         si.battle_idle()
         check_for_fizzles("Cleanse_Charm", True, False)
-        check_for_negatives()
+        check_for_negatives(last_round)
+        if last_round == True:
+            check_for_protections(last_round)
     
-def check_for_protections():
+def check_for_protections(last_round):
     check_enemy_stats()
     protection = si.check_for_card("Gladiator_Protections")
     legion_shield = si.check_for_card("Gladiator_Legion_Shield")
@@ -203,8 +205,8 @@ def check_for_protections():
         si.spell_click(si.spell_maker("shatter"), 0, 0.6, True)
         cast_on_gladiator()
         si.battle_idle()
-        check_for_protections()
-        check_for_negatives()
+        check_for_protections(last_round)
+        check_for_negatives(last_round)
 
 def check_for_fizzles(last_spell_used, cast_on_player, cast_on_enemy):
         time.sleep(1)
@@ -248,11 +250,12 @@ def check_if_dead(attempt):
             exit
         time.sleep(1)
 
+
     if (dead == False) and (si.check_for_card("Epic_Enchanted_Orthrus") == True):
         si.print_cool_way("\033[31m" + "Something During Battle Occured..." + "\033[0m")
         si.print_cool_way("Attempting To Cast Spell Again...")
         si.spell_click(si.spell_maker("Epic_Enchanted_Orthrus"), 0, 0.7, True)
-        check_if_dead(attempt)
+        time.sleep(2)
     
     elif (dead == False) and (si.check_for_card("Epic_Enchanted_Orthrus") == False) and (si.check_for_card("reshuffle") == True):
         si.print_cool_way("\033[31m" + "Enemy Still Isn't Dead" + "\033[0m")
@@ -280,6 +283,8 @@ def transport_back():
         si.spell_click(si.spell_maker("Transport"), 0, 0.7, False)
 
 def victory_idle():
+    si.game_click()
+    time.sleep(1)
     pya.keyDown("A")
     time.sleep(0.01)
     pya.keyUp("A")
@@ -291,12 +296,24 @@ def victory_idle():
     pya.keyDown("D")
     time.sleep(0.15)
     pya.keyUp("D")
-    time.sleep(1)
+    time.sleep(3)
     pya.keyDown("W")
-    time.sleep(1.57)
-    pya.keyUp("W")
     time.sleep(1.5)
-
+    pya.keyUp("W")
+    time.sleep(3)
+    if si.check_for_card("Mount_Olympus_Enter_Symbol") == False:
+        si.print_cool_way("\033[31m" + "Player Didn't Make It To Sigil" + "\033[0m")
+        time.sleep(1)
+        si.print_cool_way("Attempting To Go To Sigil Again...")
+        time.sleep(1)
+        si.print_cool_way("Waiting For Transport Timer To Reset...")
+        i = 12
+        while i > 0:
+            print(i)
+            time.sleep(1)
+            i -= 1
+        transport_back()
+        victory_idle()
 
 def gladiator_battle(attempt):
     buffs = ["Wand_Myth_Blade", "Potent_Trap_Enchanted_Feint", "Sharpened_Blade_Enchanted_Spirit_Blade"]
@@ -307,7 +324,7 @@ def gladiator_battle(attempt):
     while(len(buffs) > 0):
         for i in buffs:
             try_to_enchant()
-            check_for_negatives()
+            check_for_negatives(False)
             spells = si.spell_maker(i)
             cast_on_player = False
             cast_on_enemy = False
@@ -334,17 +351,20 @@ def gladiator_battle(attempt):
                     si.wait_for_image("Pass_Button")
 
     
-    check_for_negatives()
-    check_for_protections()
-    if attempt > 1:
-        si.spell_click(si.spell_maker("Pass_Button"), 0, 0.7, False)
-        si.wait_for_image("Pass_Button")
-        si.spell_click(si.spell_maker("Pass_Button"), 0, 0.7, False)
-        si.wait_for_image("Pass_Button")
+    check_for_negatives(False)
+    check_for_protections(False)
 
     si.print_cool_way("Final Check...")
-    check_for_negatives()
-    check_for_protections()
+    check_for_negatives(True)
+    check_for_protections(True)
+
+    unready = si.check_for_card("Unready_Orthrus")
+    while unready == True:
+        "\033[31m" + "Player Doesn't Have Enough Pips" + "\033[0m"
+        si.spell_click(si.spell_maker("Pass_Button"))
+        si.battle_idle()
+        unready = si.check_for_card("Unready_Orthrus")
+
     si.spell_click(si.spell_maker("Epic_Enchanted_Orthrus"), 0, 0.6, True)
     check_if_dead(attempt)
 
