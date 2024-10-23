@@ -227,6 +227,12 @@ def check_for_fizzles(last_spell_used, cast_on_player, cast_on_enemy):
             check_for_fizzles(last_spell_used, cast_on_player, cast_on_enemy)
 
 def reshuffle():
+    unready = si.check_for_card("Unready_Reshuffle")
+    while unready == True:
+        "\033[31m" + "Player Doesn't Have Enough Pips" + "\033[0m"
+        si.spell_click(si.spell_maker("Pass_Button"), 0, 0.7, False)
+        si.battle_idle()
+        unready = si.check_for_card("Unready_Reshuffle")
     si.spell_click(si.spell_maker("reshuffle"), 0, 0.7, True)
     si.cast_on_yourself()
     si.battle_idle()
@@ -256,6 +262,7 @@ def check_if_dead(attempt):
         si.print_cool_way("Attempting To Cast Spell Again...")
         si.spell_click(si.spell_maker("Epic_Enchanted_Orthrus"), 0, 0.7, True)
         time.sleep(2)
+        check_if_dead(attempt)
     
     elif (dead == False) and (si.check_for_card("Epic_Enchanted_Orthrus") == False) and (si.check_for_card("reshuffle") == True):
         si.print_cool_way("\033[31m" + "Enemy Still Isn't Dead" + "\033[0m")
@@ -361,7 +368,7 @@ def gladiator_battle(attempt):
     unready = si.check_for_card("Unready_Orthrus")
     while unready == True:
         "\033[31m" + "Player Doesn't Have Enough Pips" + "\033[0m"
-        si.spell_click(si.spell_maker("Pass_Button"))
+        si.spell_click(si.spell_maker("Pass_Button"), 0, 0.7, False)
         si.battle_idle()
         unready = si.check_for_card("Unready_Orthrus")
 
