@@ -95,7 +95,32 @@ def travel_through_dungeon():
     t1.join()
     t2.join()
 
-    if started_battle == False:
+    if (timeout == True) and (started_battle == False) and (si.check_for_card("Dungeon_Leave_Sign")):
+        si.print_cool_way("\033[31m" + "THIS DOESN'T MAKE ANY SENSE" + "\033[0m")
+        time.sleep(2)
+        si.print_cool_way("\033[31m" + "WHY ARE THE MOVEMENTS SO RANDOM?!?!?!?!?" + "\033[0m")
+        time.sleep(2)
+        si.print_cool_way("\033[31m" + "KINGSISLE HAS TO BE DOING THIS ON PURPOSE!!!" + "\033[0m")
+        time.sleep(2)
+        si.print_cool_way("Anyways Now I'm Transfering Back To Aquilla")
+        time.sleep(1)
+        si.spell_click(si.spell_maker("Dungeon_Yes_Button"), 0, 0.7, False)
+        time.sleep(5)
+        transport_back()
+        si.wait_for_image("Garden_Pattern")
+        victory_idle()
+        si.game_click()
+        pya.click()
+        pya.keyDown("X")
+        time.sleep(0.5)
+        pya.keyUp("X")
+        time.sleep(1)
+        si.spell_click(si.spell_maker("Go_In_Button"), 0, 0.7, False)
+        si.print_cool_way("Waiting To Enter Dungeon...")
+        si.wait_for_image('Mount_Olympus_Floor_Pattern')
+        travel_through_dungeon()
+
+    elif started_battle == False:
         pya.keyUp("W")
         si.print_cool_way("\033[31m" + "Battle Didn't Start" + "\033[0m")
         si.print_cool_way("Restarting Dungeon...")
@@ -359,27 +384,29 @@ def gladiator_battle(attempt):
                     cast_on_gladiator()
                     cast_on_enemy = True
 
-                si.wait_for_image("Pass_Button")
+                si.battle_idle()
                 check_for_fizzles(i, cast_on_player, cast_on_enemy)
                 buffs.remove(i)
-                si.wait_for_image("Pass_Button")
+                si.battle_idle()
                 break
             elif (position == None) and (i == buffs[-1]):
                 position = si.image_search(si.spell_maker("Pass_Button"), 0.7)
                 if position != None:
                     si.print_cool_way("Passing Round")
                     si.spell_click(si.spell_maker("Pass_Button"), 0, 0.7, False)
-                    si.wait_for_image("Pass_Button")
+                    si.battle_idle()
 
     
     check_for_negatives(False)
     check_for_protections(False)
 
+    time.sleep(2)
     unready = si.check_for_card("Unready_Orthrus")
     while unready == True:
         si.print_cool_way("\033[31m" + "Player Doesn't Have Enough Pips" + "\033[0m")
         si.spell_click(si.spell_maker("Pass_Button"), 0, 0.7, False)
         si.battle_idle()
+        time.sleep(2)
         unready = si.check_for_card("Unready_Orthrus")
     
     si.print_cool_way("Final Check...")
@@ -468,6 +495,7 @@ def main():
         victory_idle()
         timing = time.time() - timing
         timing = (int(timing)) / 60.0 
+        timing = round(timing, 2)
         si.print_cool_way( "\033[33m" + "Timing: " + str(timing) + " Minutes" + "\033[0m")
         times.append(timing)
 
