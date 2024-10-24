@@ -237,6 +237,14 @@ def reshuffle():
     si.cast_on_yourself()
     si.battle_idle()
 
+def check_reshuffled_deck():
+    spells = ["Wand_Myth_Blade", "Spirit_Blade", "Epic", "Feint", "Potent_Trap"]
+    si.battle_idle()
+    for i in spells:
+        if si.check_for_card(i) == True:
+            return True
+    return False
+
 def check_if_dead(attempt):
     si.print_cool_way("Checking If Enemy Is Dead...")
     Pass_Button = si.spell_maker("Pass_Button")
@@ -266,8 +274,11 @@ def check_if_dead(attempt):
     
     elif (dead == False) and (si.check_for_card("Epic_Enchanted_Orthrus") == False) and (si.check_for_card("reshuffle") == True):
         si.print_cool_way("\033[31m" + "Enemy Still Isn't Dead" + "\033[0m")
-        si.print_cool_way("Reshuffling Deck")
+        si.print_cool_way("Reshuffling Deck...")
         reshuffle()
+        while check_for_reshuffle == False:
+            reshuffle()
+            check_reshuffled_deck()
         gladiator_battle(attempt + 1)
 
     elif (dead == False) and (si.check_for_card("Epic_Enchanted_Orthrus") == False) and (si.check_for_card("reshuffle") == False):
@@ -278,6 +289,9 @@ def check_if_dead(attempt):
         si.battle_idle()
         if si.check_for_card("reshuffle") == True:
             reshuffle()
+            while check_for_reshuffle == False:
+                reshuffle()
+                check_reshuffled_deck()
             gladiator_battle(attempt + 1)
         else:
             si.Flee_Battle()
@@ -361,16 +375,17 @@ def gladiator_battle(attempt):
     check_for_negatives(False)
     check_for_protections(False)
 
+    unready = si.check_for_card("Unready_Orthrus")
+    while unready == True:
+        si.print_cool_way("\033[31m" + "Player Doesn't Have Enough Pips" + "\033[0m")
+        si.spell_click(si.spell_maker("Pass_Button"), 0, 0.7, False)
+        si.battle_idle()
+        unready = si.check_for_card("Unready_Orthrus")
+    
     si.print_cool_way("Final Check...")
     check_for_negatives(True)
     check_for_protections(True)
 
-    unready = si.check_for_card("Unready_Orthrus")
-    while unready == True:
-        "\033[31m" + "Player Doesn't Have Enough Pips" + "\033[0m"
-        si.spell_click(si.spell_maker("Pass_Button"), 0, 0.7, False)
-        si.battle_idle()
-        unready = si.check_for_card("Unready_Orthrus")
 
     si.spell_click(si.spell_maker("Epic_Enchanted_Orthrus"), 0, 0.6, True)
     check_if_dead(attempt)
@@ -427,9 +442,10 @@ def main():
             for i in times:
                 average += i
             average /= len(times)
-            si.print_cool_way("\033[33m" + "Average Time Is " + str(average) + "Minutes" + "\033[0m")
+            average = round(average, 2)
+            si.print_cool_way("\033[33m" + "Average Time Is " + str(average) + " Minutes" + "\033[0m")
 
-        si.print_cool_way("Attempt: " + str(attempt))
+        si.print_cool_way("\033[33m" + "Attempt: " + str(attempt) + "\033[0m")
         timing = time.time()
         si.game_click()
         pya.click()
@@ -437,7 +453,9 @@ def main():
         time.sleep(0.5)
         pya.keyUp("X")
         time.sleep(1)
-        si.spell_click(si.spell_maker("Go_In_Button"), 0, 0.7, False)
+        position = si.image_search(si.spell_maker("Go_In_Button"), 0.7)
+        if position != None:
+            si.spell_click(si.spell_maker("Go_In_Button"), 0, 0.7, False)
         si.print_cool_way("Waiting To Enter Dungeon...")
         si.wait_for_image('Mount_Olympus_Floor_Pattern')
         travel_through_dungeon()
