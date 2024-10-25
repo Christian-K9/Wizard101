@@ -114,8 +114,10 @@ def travel_through_dungeon():
         pya.keyDown("X")
         time.sleep(0.5)
         pya.keyUp("X")
+        position = si.image_search(si.spell_maker("Go_In_Button"), 0.7)
+        if position != None:
+            si.spell_click(si.spell_maker("Go_In_Button"), 0, 0.7, False)
         time.sleep(1)
-        si.spell_click(si.spell_maker("Go_In_Button"), 0, 0.7, False)
         si.print_cool_way("Waiting To Enter Dungeon...")
         si.wait_for_image('Mount_Olympus_Floor_Pattern')
         travel_through_dungeon()
@@ -132,8 +134,10 @@ def travel_through_dungeon():
         pya.keyDown("X")
         time.sleep(0.5)
         pya.keyUp("X")
+        position = si.image_search(si.spell_maker("Go_In_Button"), 0.7)
+        if position != None:
+            si.spell_click(si.spell_maker("Go_In_Button"), 0, 0.7, False)
         time.sleep(1)
-        si.spell_click(si.spell_maker("Go_In_Button"), 0, 0.7, False)
         si.print_cool_way("Waiting To Enter Dungeon...")
         si.wait_for_image('Mount_Olympus_Floor_Pattern')
         travel_through_dungeon()

@@ -179,7 +179,6 @@ def enchant_card(enchanted, spell):
     time.sleep(0.5)
 
 def cast_on_yourself():
-    print_cool_way("Casting Spell On Player...")
     spell_click(spell_maker("Yourself"), 0, 0.8, False)
     
 def identifyEnemies():
@@ -216,8 +215,23 @@ def aot_Battle(use_Enchanted, enchanted_card, spell_card):
         spell_click(spell_maker(spell_card), 0, 0.6)
     check_if_dead([enchanted_card], None, None)
 
+
+def two_round_battle(buff_enchant, buff,spell_enchant, spell):
+    pya.moveTo(200, 200, 0.5, pya.easeOutQuad)
+    enchant_card(buff_enchant, buff)
+    enchant_card(spell_enchant, spell)
+
+    buff = buff_enchant + "_Enchanted_" + buff
+    hitter = spell_enchant + "_Enchanted_" + spell
+    spell_click(spell_maker(buff))
+    check_for_fizzles()
+    spell_click(spell_maker(hitter))
+    check_if_dead([hitter], None, None)
+    victory_Idle("aot_battle")
+
+
 #Blades You Twice, Then Cast Orthrus  
-def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate_hitter):
+def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate_hitter, battle_type):
     identifyEnemies()
     #enchanted_list[0] = enchant for buff
     #enchanted_list[1] = enchant for spell
@@ -225,6 +239,8 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
     #spell_card_list[1] = second buff
     #spell_card_list[2] = hit
     #spell_card_list[3] = third buff
+
+    pya.moveTo(200, 200, 0.5, pya.easeOutQuad)
 
     enchant_card(enchanted_list[0], spell_card_list[0])
     enchant_card(enchanted_list[1], spell_card_list[1])
@@ -252,7 +268,7 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
         i += 1
     check_for_fizzles(enchanted_spell_list[i], cast_on_player,)
     check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter)
-    victory_Idle("dungeon_battle")
+    victory_Idle(battle_type)
         
 def cast_on_enemy():
     print_cool_way("Casting Spell On Enemy...")
