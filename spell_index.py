@@ -223,10 +223,30 @@ def two_round_battle(buff_enchant, buff,spell_enchant, spell):
 
     buff = buff_enchant + "_Enchanted_" + buff
     hitter = spell_enchant + "_Enchanted_" + spell
-    spell_click(spell_maker(buff))
-    check_for_fizzles()
-    spell_click(spell_maker(hitter))
+    spell_click(spell_maker(buff), 0, 0.7, True)
+    cast_on_yourself()
+    battle_idle()
+    check_for_fizzles(buff, True)
+    spell_click(spell_maker(hitter), 0, 0.7, True)
     check_if_dead([hitter], None, None)
+    victory_Idle("aot_battle")
+
+def three_round_battle(buff_enchant, first_buff, second_buff,spell_enchant, spell):
+    pya.moveTo(200, 200, 0.5, pya.easeOutQuad)
+    enchant_card(buff_enchant, first_buff)
+    enchant_card(buff_enchant, second_buff)
+    enchant_card(spell_enchant, spell)
+
+    first_buff = buff_enchant + "_Enchanted_" + first_buff
+    second_buff = buff_enchant + "_Enchanted_" + second_buff
+    hitter = spell_enchant + "_Enchanted_" + spell
+    spell_click(spell_maker(first_buff), 0, 0.7, True)
+    cast_on_yourself()
+    battle_idle()
+    check_for_fizzles(first_buff, True)
+    spell_click(spell_maker(second_buff), 0, 0.7, True)
+    cast_on_yourself
+    battle_idle()
     victory_Idle("aot_battle")
 
 
