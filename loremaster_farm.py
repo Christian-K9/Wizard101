@@ -39,7 +39,7 @@ def loremaster_run(enchanted_list, spell_card_list, alternate_buff, alternate_hi
         farm.game_click()
         farm.enter_dungeon("Loremaster_Banner")
         farm.move()
-        farm.four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate_hitter)
+        farm.four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate_hitter, "dungeon_battle")
         pya.keyDown("s")
         time.sleep(0.5)
         pya.keyUp("s")

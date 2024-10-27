@@ -69,6 +69,7 @@ def color_maker(color):
         index += 1
 # Scroll across screen if image isn't found
 def scroll_and_search(spell):
+    spell_found = False
     position = None
     x = 0
     print_cool_way1("Moving Mouse Left", 0.03)
@@ -286,7 +287,7 @@ def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate
         battle_idle()
         check_for_fizzles(enchanted_spell_list[i], cast_on_player,)
         i += 1
-    check_for_fizzles(enchanted_spell_list[i], cast_on_player,)
+    time.sleep(2)
     check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter)
     victory_Idle(battle_type)
         
