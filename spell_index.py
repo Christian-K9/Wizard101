@@ -382,11 +382,10 @@ def check_if_dead(enchanted_spell_list, alternate_buff, alternate_hitter):
     
 def wait_for_image(image):
     spell = spell_maker(image)
-    position = image_search(spell, 0.6)
-    # Waits Until Pass Button Is Displayed
+    position = image_search(spell, 0.7)
     while position == None:
         time.sleep(0.5)
-        position = image_search(spell, 0.6)
+        position = image_search(spell, 0.7)
 
 def no_more_cards(enchanted_spell_list):
     if enchanted_spell_list == None:
