@@ -61,9 +61,16 @@ def check_keys():
 
 # Prints the log of all events and exits
 def print_log():
-    print("\nEvery Key Pressed: ")
+    print("Logging Events: ")
+    print("\nEvery Command For Wizard101: ")
     for event in logging_events:
-        print(event)
+        #print(event)
+        key = (event[26:27])
+        timing = (event[38:41])
+        print("     pya.keyDown('" + key + "')")
+        print("     time.sleep(" + timing + ")") 
+        print("     pya.keyUp('" + key + "')")
+        print("     time.sleep(1)")
     sys.exit()
 
 # Main loop setup

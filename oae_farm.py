@@ -36,8 +36,10 @@ def aot_run(use_Enchanted, enchanted_card, spell_card):
     seconds = time.time()
     while True:
         attempt += 1
-        seconds_passed = time.time()
-        aot.print_cool_way("Seconds Passed: " + str(int(seconds_passed - seconds)))
+        time_passed = time.time()
+        time_passed -= seconds
+        time_passed /= 60
+        aot.print_cool_way("Time Passed: " + str(int(time_passed)) + " Minutes")
         aot.print_cool_way("\033[33m" + "Attempt Number: " + str(attempt) + "\033[0m")
         aot.aot_Battle(use_Enchanted, enchanted_card, spell_card)
         aot.victory_Idle("aot_battle")

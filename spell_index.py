@@ -160,15 +160,15 @@ def discard_card(spell):
         pya.moveTo(x, y - 100, 1, pya.easeOutQuad)
 
 def game_click():
-    position = image_search(spell_maker("Spell_Book"), 0.6)
+    position = image_search(spell_maker("Spell_Book"), 0.7)
     if position != None:
         x, y = position
         x = int(x) - 500
         y = int(y) - 500
-        pya.moveTo(x, y, 1, pya.easeOutQuad)
+        pya.moveTo(x, y, 0.5, pya.easeOutQuad)
         pya.click()
-        time.sleep(1)
-        pya.moveTo(x, y - 100, 1, pya.easeOutQuad)
+        time.sleep(0.5)
+        pya.moveTo(x, y - 100, 0.5, pya.easeOutQuad)
     #middle = 1393 477
     #spell book = 1837, 817
 
@@ -208,6 +208,7 @@ def aot_Battle(use_Enchanted, enchanted_card, spell_card):
         pass_round()
         wait_for_image("Pass_Button")
         enemies = identifyEnemies()
+    pya.moveTo(200, 200, 0.5, pya.easeOutQuad)
     if (use_Enchanted == True):
         enchanted_spell = (enchanted_card + "_Enchanted_" + spell_card)
         enchant_card(enchanted_card, spell_card)
@@ -337,7 +338,7 @@ def Flee_Battle():
 
 def check_for_card(spell):
     spell = spell_maker(spell)
-    position = image_search(spell, 0.9)
+    position = image_search(spell, 0.7)
     if position == None:
         return False
     elif position != None:
@@ -420,9 +421,13 @@ def battle_idle():
 def aot_victory():
         position = image_search(spell_maker("Pass_Button"), 0.6)
         while position == None:
+            if check_for_card("Pass_Button") == True:
+                break
             pya.keyDown("w")
             time.sleep(1.5)
             pya.keyUp("w")
+            if check_for_card("Pass_Button") == True:
+                break
             time.sleep(0.5)
             pya.keyDown("s")
             time.sleep(1.5)
