@@ -89,8 +89,31 @@ def find_beans_3():
     print("Alive Enemies: " + str(alive_enemies))
     print("Alive Enemies: " + str(len(alive_enemies)))
     beans_find = find_beans_4(alive_enemies[0])
-    if len(alive_enemies) != 2 and beans_find == False:
+    print(beans_find)
+    if len(alive_enemies) != 2 and beans_find == None:
         return False
+    elif len(alive_enemies == 2):
+        medulla_pos = si.image_search(medulla, 0.7)
+        first_pos = si.image_search(alive_enemies[0], 0.7)
+        second_pos = si.image_search(alive_enemies[1], 0.7)
+        if (first_pos != None) and (second_pos != None):
+            x_one, y_one = first_pos
+            x_two, y_two = second_pos
+            x_medulla, y_medulla = medulla_pos
+            x_one -= x_medulla
+            x_two -= x_medulla
+            if abs(x_one > x_two):
+                print("Beans is: " + alive_enemies[0])
+                pya.moveTo(x_one + 30, y_one, 0.5, pya.easeOutQuad)
+                pya.click()
+
+            elif abs(x_two > x_one):
+                print("Beans is: " + alive_enemies[1])
+                pya.moveTo(x_two + 30, y_two, 0.5, pya.easeOutQuad)
+                pya.click()
+
+
+
     
 def find_beans_4(alive_enemy):
     enemies = ["dagger", "key", "gem", "spiral"]
@@ -103,20 +126,30 @@ def find_beans_4(alive_enemy):
             pya.moveTo(x + 35, y, 0.5, pya.easeOutQuad)
             time.sleep(1)
             pya.click()
+            return True
 
 
 def check_beans_feint():
     time.sleep(1)
+    print("Checking Beans Feint")
     beans = si.spell_maker("Life_Symbol")
     position = si.image_search(beans, 0.6)
     if position != None:
+        print("Beans Found")
         x,y = position
         pya.moveTo(x + 5, y + 30, 0.5, pya.easeOutQuad)
         feint = si.spell_maker("Beans_Feint")
         position = si.image_search(feint, 0.9)
         if position != None:
-            return True
-    return False
+            return False
+            print("Position Found: " + str(position))
+        else:
+            print("Feint Not Found")
+    else:
+        print("Beans Not Found")
+        return True
+    return True
+
 
 
 def cast_on_medulla():
@@ -251,9 +284,12 @@ def part_two_fight():
     #   6. Vaporize Medulla Until Cannon Defeats Him
 
     def cast_on_beans():
-        find_beans_1(True)
-        find_beans_2(True)
-        find_beans_3()
+        if find_beans_1(True) == True:
+            return
+        elif find_beans_2(True) == True:
+            return
+        else:
+            find_beans_3()
 
     def check_on_beans():
         if (((find_beans_1(False) == False) and (find_beans_2(False) == False) and (find_beans_3() == False)) == True):
@@ -444,12 +480,14 @@ def part_two_fight():
     beans_fight()
     medulla_fight()
 
-si.print_cool_way("Now Starting Headquarters Dungeon")
-time.sleep(2)
-si.game_click()
-part_one()
+#si.print_cool_way("Now Starting Headquarters Dungeon")
+#time.sleep(2)
+#si.game_click()
+#part_one()
 
-si.print_cool_way("Now Starting Part Two Of Dungeon")
-outfit_equip("1")
-part_two()
+#si.print_cool_way("Now Starting Part Two Of Dungeon")
+#outfit_equip("1")
+si.wait_for_image("Pass_Button")
+part_two_fight()
+#part_two()
 

@@ -154,10 +154,10 @@ def discard_card(spell):
     position = image_search(spell_maker(spell), 0.6)
     if position != None:
         x, y = position
-        pya.moveTo(x, y, 1, pya.easeOutQuad)
+        pya.moveTo(x, y, 0.5, pya.easeOutQuad)
         pya.click(button="right")
         time.sleep(1)
-        pya.moveTo(x, y - 100, 1, pya.easeOutQuad)
+        pya.moveTo(x, y - 100, 0.5, pya.easeOutQuad)
 
 def game_click():
     position = image_search(spell_maker("Spell_Book"), 0.7)
