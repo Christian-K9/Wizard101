@@ -1,27 +1,49 @@
-import spell_index as si
-import pyautogui as pya
+import os
+import sys
 import time
 
-time.sleep(3)
-pya.keyDown("A")
-time.sleep(0.01)
-pya.keyUp("A")
-time.sleep(1)
-pya.keyDown("W")
-time.sleep(4)
-pya.keyUp("W")
-time.sleep(1)
-pya.keyDown("D")
-time.sleep(0.15)
-pya.keyUp("D")
-time.sleep(1)
-pya.keyDown("W")
-time.sleep(1.57)
-pya.keyUp("W")
-time.sleep(1.5)
-pya.keyDown("X")
-time.sleep(0.5)
-pya.keyUp("X")
-time.sleep(1)
+import os
+import sys
+import threading
+import time
+import keyboard  # Install with: pip install keyboard
 
-si.spell_click(si.spell_maker("Go_In_Button"), 0, 0.7, False)
+def stop_program():
+    """Exit the program completely."""
+    print("\nStopping program...")
+    os._exit(0)  # Hard exit
+
+
+def restart_program():
+    """Restart the current Python script."""
+    print("Restarting program...")
+    python = sys.executable
+    os.execv(python, [python] + sys.argv)  # Fully restarts the script
+
+def main_program():
+    """Main loop to simulate program running."""
+    i = 1
+    while True:
+        print(f"Program running... ({i})")
+        time.sleep(1)
+        i += 1
+
+def listen_for_exit():
+    """Listen for 'q' to restart, or 'e' to exit completely."""
+    print("Press 'Q' to restart, 'E' to exit...")
+    while True:
+        if keyboard.is_pressed("q"):
+            print("\n'Q' pressed. Restarting...")
+            restart_program()
+        elif keyboard.is_pressed("e"):
+            print("\n'E' pressed. Exiting...")
+            stop_program()
+
+
+if __name__ == "__main__":
+    # Start the key listener in a separate thread
+    listener_thread = threading.Thread(target=listen_for_exit, daemon=True)
+    listener_thread.start()
+
+    # Start the main program
+    main_program()

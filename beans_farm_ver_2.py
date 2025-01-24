@@ -1,25 +1,43 @@
 import pyautogui as pya
 import time
 import spell_index as si
+import threading
+import os
+import sys
+import keyboard as key
+
+def collect_orbs():
+    si.print_cool_way("Collecting Orbs...")
+    pya.keyDown("s")
+    time.sleep(7)
+    pya.keyUp("s")
+    time.sleep(1)
+    pya.keyDown("w")
+    time.sleep(7)
+    pya.keyUp("w")
+    time.sleep(1)
+    if si.check_for_card("Headquarters_Symbol") == True:
+        return
+    else:
+        si.spell_click(si.spell_maker("Pinpoint"), 0, 0.9, False)
 
 reshuffle = 4
+vaporize = 36
 def try_to_discard(possible_discards):
     global reshuffle
     card_check = False
     for i in possible_discards:
         if si.check_for_card(i) == True:
             if ((i == "Reshuffle") or (i == "Unready_Reshuffle")):
-                if reshuffle <= 1:
+                if reshuffle == 1:
                     print("Discarded Too Many Reshuffles")
-                    continue
+                    return
                 else:
                     print("Discarding Reshuffle")
-                    reshuffle -=1
+                    reshuffle -= 1
             print("Reshuffles Left: " + str(reshuffle))
             si.discard_card(i)
             card_check = True
-        else:
-            print(str(i) + " Not Found")
     return card_check
 
 def switch_to_balance():
@@ -45,6 +63,22 @@ def outfit_equip(outfit_number):
     time.sleep(0.3)
     pya.keyUp(outfit_number)
 
+def refill_reshuffle():
+    si.print_cool_way("Refilling Reshuffle")
+    pya.press("p")
+    treasure_card = si.spell_maker("Treasure_Card_Symbol")
+    next_button = si.spell_maker("Arrow_Button")
+    vaporize = si.spell_maker("vaporize")
+    si.spell_click(treasure_card, 0, 0.9, False)
+    while si.check_for_card("vaporize") == False:
+        si.spell_click(next_button, 0, 0.7, False)
+    position = si.image_search(vaporize, 0.7)
+    x, y = position
+    pya.moveTo(x, y, 0.5, pya.easeOutQuad)
+    while vaporize < 36:
+        pya.click()
+        time.sleep(1)
+
 def cast_on_quizzler():
     quizzler = si.spell_maker("Myth_Symbol")
     if si.image_search(quizzler, 0.9) != None:
@@ -61,21 +95,18 @@ def find_beans_1(click):
             si.spell_click(beans, 0, 0.7, 0)
         return True
     else:
-        print("Find Beans 1: False")
         return False
     
 def find_beans_2(click):
     beans = si.spell_maker("Life_Symbol")
     position = si.image_search(beans, 0.9)
     if position != None:
-        print("Position: " + str(position))
         if click == True:
             x,y = position
             pya.moveTo(x + 30, y + 5, 0.5, pya.easeOutQuad)
             time.sleep(1)
             pya.click()
     else:
-        print("Find Beans 2: False")
         return False
 
 
@@ -87,11 +118,8 @@ def find_beans_3():
         enemy = si.spell_maker(i)
         if si.image_search(enemy, 0.7) != None:
             alive_enemies.append(enemy)
-    print("Alive Enemies: " + str(alive_enemies))
-    print("Alive Enemies: " + str(len(alive_enemies)))
     if len(alive_enemies) > 0:
         beans_find = find_beans_4(alive_enemies[0])
-    print(beans_find)
     if len(alive_enemies) != 2 and beans_find == None:
         return False
     elif len(alive_enemies == 2):
@@ -139,52 +167,34 @@ def final_measure(spell):
     if position != None:
 
         x_pos,y_pos = position
-        print("X_Pos" + str(x_pos))
         x_points = [182, 437, 678, 924]
         difference = 1023
         coordinate = 0
         for x in x_points:
-            print("Difference: " + str(difference))
-            print("Max: " + str(max(x_pos,x)))
-            print("Min: " + str(min(x_pos,x)))
             temp = max(x_pos, x) - min(x_pos, x)
-            print("Temp" + str(temp))
             if temp < difference:
                 difference = temp
                 coordinate = x
-            print("New Difference: " + str(difference))
-            print()
-            print()
 
-        print("Difference:" + str(difference))
         for x in x_points:
-            print(x)
             if x != coordinate:
                 si.spell_click(spell, 0, 0.7, False)
                 pya.moveTo(x, 82, 0.25, pya.easeOutQuad)
                 pya.click()
                 time.sleep(1)
-            else:
-                print("Not Clicking " + str(x)) 
 
 def check_beans_feint():
     time.sleep(1)
-    print("Checking Beans Feint")
     beans = si.spell_maker("Life_Symbol")
     position = si.image_search(beans, 0.6)
     if position != None:
-        print("Beans Found")
         x,y = position
         pya.moveTo(x + 5, y + 30, 0.5, pya.easeOutQuad)
         feint = si.spell_maker("Beans_Feint")
         position = si.image_search(feint, 0.9)
         if position != None:
             return False
-            print("Position Found: " + str(position))
-        else:
-            print("Feint Not Found")
     else:
-        print("Beans Not Found")
         return True
     return True
 
@@ -199,6 +209,22 @@ def cast_on_medulla():
         pya.click()
 
 def quizzler_battle():
+    si.print_cool_way("Getting Ready For First Battle")
+    si.wait_for_image("More_Button")
+
+    More_Button = si.spell_maker("More_Button")
+    Done_Button = si.spell_maker("Done_Button")
+
+    for i in range(0,4):
+        si.spell_click(More_Button, 0, 0.9, False)
+        time.sleep(2)
+
+    si.spell_click(Done_Button, 0, 0.7, False)
+    time.sleep(3)
+    pya.keyDown("w")
+    time.sleep(3)
+    pya.keyUp("w")
+
     si.wait_for_image("Pass_Button")
     myth_prism = si.spell_maker("Myth_Prism")
     si.spell_click(myth_prism, 0, 0.7, True)
@@ -209,6 +235,11 @@ def quizzler_battle():
     si.spell_click(orthrus, 0, 0.7, True)
     si.wait_for_image("More_Button")
 
+    si.spell_click(More_Button, 0, 0.9, False)
+    time.sleep(2)
+    si.spell_click(Done_Button, 0, 0.7, False)
+    time.sleep(3)
+
 def try_to_enchant(spell, enchant):
     if (si.check_for_card(spell) == True) and (si.check_for_card(enchant) == True):
         si.enchant_card(enchant, spell)
@@ -216,14 +247,9 @@ def try_to_enchant(spell, enchant):
     else:
         return False
 
-def enter_dungeon():
-    si.game_click()
-    time.sleep(3)
-    si.wait_for_image("Headquarters_Symbol")
-    pya.press("x")
-    time.sleep(20)
-    si.wait_for_image("Spell_Book")
-    time.sleep(3)
+def navigate_dungeon_first():
+    time.sleep(2)
+    print()
     pya.keyDown('W')
     time.sleep(3.55)
     pya.keyUp('W')
@@ -252,7 +278,46 @@ def enter_dungeon():
 
     time.sleep(3)
 
-def part_two():
+def counter(seconds, image):
+    while seconds > 0:
+        if si.check_for_card(image) == True:
+            return
+        print(seconds)
+        seconds -= 1
+        time.sleep(1)
+    si.print_cool_way("Player Didn't Make It To Battle")
+    time.sleep(1)
+    si.print_cool_way("Returning Back...")
+    transport = si.spell_maker("Pinpoint")
+    si.spell_click(transport, 0, 0.9, False)
+    part_one()
+
+def multitask(method, seconds, image):
+    navigator = threading.Thread(target=method)
+    navigator.start()
+
+    timer = threading.Thread(target=counter(seconds, image), daemon=True)
+    timer.start()
+    timer.join()
+
+def part_one():
+
+    si.print_cool_way("Equipping First Battle Deck")
+    outfit_equip("2")
+    si.print_cool_way("Make Sure You Are Standing In Front Of The Signal")
+    si.game_click()
+    time.sleep(3)
+    si.wait_for_image("Headquarters_Symbol")
+    pya.press("x")
+    time.sleep(20)
+    si.wait_for_image("Spell_Book")
+    time.sleep(3)
+    si.print_cool_way("Player Has 30 Seconds To Get To The Quizzler")
+
+
+def navigate_dungeon_second():
+     time.sleep(2)
+     print()
      pya.keyDown('D')
      time.sleep(0.2)
      pya.keyUp('D')
@@ -278,37 +343,6 @@ def part_two():
      pya.keyUp('W')
 
      si.wait_for_image("Pass_Button")
-     part_two_fight()
-
-def part_one():
-
-    si.print_cool_way("Equipping First Battle Deck")
-    outfit_equip("2")
-    si.print_cool_way("Make Sure You Are Standing In Front Of The Signal")
-    enter_dungeon()
-    si.print_cool_way("Getting Ready For First Battle")
-
-    si.wait_for_image("More_Button")
-
-    More_Button = si.spell_maker("More_Button")
-    Done_Button = si.spell_maker("Done_Button")
-
-    for i in range(0,4):
-        si.spell_click(More_Button, 0, 0.9, False)
-        time.sleep(2)
-
-    si.spell_click(Done_Button, 0, 0.7, False)
-    time.sleep(3)
-    pya.keyDown("w")
-    time.sleep(3)
-    pya.keyUp("w")
-
-    quizzler_battle()
-
-    si.spell_click(More_Button, 0, 0.9, False)
-    time.sleep(2)
-    si.spell_click(Done_Button, 0, 0.7, False)
-    time.sleep(3)
 
 def part_two_fight():
 
@@ -377,7 +411,7 @@ def part_two_fight():
         si.wait_for_image("Pass_Button")
         time.sleep(1)
         while (check_on_beans() and check_beans_feint()):
-            print("Attempting To Feint Beans")
+            si.print_cool_way("Attempting To Feint Beans")
             if si.check_for_card("Feint") == True:
                 si.spell_click(si.spell_maker("Feint"), 0, 0.7, True)
                 cast_on_beans(si.spell_maker("Feint"))
@@ -401,8 +435,6 @@ def part_two_fight():
         si.print_cool_way("Card Ready")
 
         beans_status = si.image_search(si.spell_maker(beans), 0.5)
-        print("Witch Status " + str(si.check_for_card(medusa)))
-        print("Calendar Status " + str(si.check_for_card(ninja_pigs)))
 
         while beans_status != None:
             if (si.check_for_card(medusa) == True):
@@ -444,6 +476,7 @@ def part_two_fight():
             si.spell_click(si.spell_maker("Draw_Button"), 0, 0.7, False)
             si.spell_click(si.spell_maker("Vaporize_Treasure_Card"), 0, 0.7, True)
             cast_on_medulla()
+            vaporize -= 1
 
         dispel = si.spell_maker("Headquarters_Dispel")
         feint = si.spell_maker("Headquarters_Feint")
@@ -453,8 +486,8 @@ def part_two_fight():
         #3. If there is a dispel, but no feint, with a feint in deck, then feint
         #4. If there is a dispel, but no feint, with no feint in deck, with a reshuffle, then reshuffle
         #5. If Nothing else then vaporize
-
-        while (si.check_for_card("Spell_Book") == False):
+        spell_book = si.check_for_card("Spell_Book")
+        while (spell_book == False):
             try_to_discard(["Witch's_House_Call", "Celestial_Calendar", "Frenzy", "Extract_Pig_Enchanted_Celestial_Calendar","Extract_Pig_Enchanted_Witch's_House_Call", "Clear_Mind", 
                             "Unready_Witch's_House_Call", "Unready_Celestial_Calendar"])
             check_medulla_stats()
@@ -473,6 +506,8 @@ def part_two_fight():
             else:
                 vaporize()
             si.wait_for_image("Pass_Button")
+            if si.check_for_card(spell_book) == True:
+                return
         
             
     spells = {"Medusa": "Extract_Pig", "Ninja_Pigs": "Extract_Pig",}
@@ -521,12 +556,61 @@ def part_two_fight():
     beans_fight()
     medulla_fight()
 
+def restart_program():
+    print("Restarting Farm...")
+    si.spell_click(si.spell_maker("Pinpoint"), 0, 0.7, False)
+    time.sleep(5)
+    python = sys.executable
+    os.execv(python, [python] + sys.argv)  # Fully restarts the script
+
+def stop_program():
+    print("Exiting Program...")
+    print("Press 'CTRL + C ' To Return To Path")
+    os._exit(0)
+
+def listener():
+    while True:
+        if key.is_pressed("e"):
+            stop_program()
+        elif key.is_pressed("r"):
+            restart_program()
+
+#listener_program = threading.Thread(target=listener, daemon=True)
+#listener_program.start()
 si.print_cool_way("Now Starting Headquarters Dungeon")
 time.sleep(2)
-si.game_click()
-part_one()
 
-si.print_cool_way("Now Starting Part Two Of Dungeon")
-outfit_equip("1")
-part_two()
+def farm():
 
+    while True:
+        si.game_click()
+        time.sleep(1)
+        collect_orbs()
+        part_one()
+
+        navigator = threading.Thread(target=navigate_dungeon_first)
+        navigator.start()
+
+        timer = threading.Thread(target=counter(30, "More_Button"), daemon=True)
+        timer.start()
+        timer.join()
+        navigator.join()
+
+        quizzler_battle()
+
+        si.print_cool_way("Now Starting Part Two Of Dungeon")
+        outfit_equip("1")
+        navigator = threading.Thread(target=navigate_dungeon_second, daemon=True)
+        navigator.start()
+
+        timer = threading.Thread(target=counter(30, "Pass_Button"), daemon=True)
+        timer.start()
+        timer.join()
+        navigator.join()
+
+        si.spell_click(si.spell_maker("Pinpoint"))
+        time.sleep(15)
+        refill_reshuffle()
+
+farm()
+#listener_program.join()
