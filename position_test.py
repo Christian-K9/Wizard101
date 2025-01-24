@@ -3,46 +3,31 @@ import pyautogui as pya
 import time
 import keyboard as key
 
-def final_measure():
+<<<<<<< HEAD
+position = si.image_search(si.spell_maker("Yourself"), 0.7)
+if position != None:
+    x,y = position
+    pya.moveTo(x - 100, y - 20, 0.5, pya.easeOutQuad)
     time.sleep(1)
-    medulla = si.spell_maker("Myth_Symbol")
-    position = si.image_search(medulla, 0.7)
+    pya.click()
+    time.sleep(1)
+    if si.check_for_card("Yes_Button") == True:
+        yes_button = si.spell_maker("Yes_Button")
+        si.spell_click(yes_button, 0, 0.7, False)
+=======
+
+def check_beans_feint():
+    time.sleep(1)
+    beans = si.spell_maker("Balance_Symbol")
+    position = si.image_search(beans, 0.6)
     if position != None:
+        x,y = position
+        pya.moveTo(x + 5, y + 30, 0.5, pya.easeOutQuad)
+        feint = si.spell_maker("Beans_Feint")
+        position = si.image_search(feint, 0.9)
+        if position != None:
+            return True
+    return False
 
-        x_pos,y_pos = position
-        print("X_Pos" + str(x_pos))
-        x_points = [182, 437, 678, 924]
-        difference = 1023
-        coordinate = 0
-        for x in x_points:
-            print("Difference: " + str(difference))
-            print("Max: " + str(max(x_pos,x)))
-            print("Min: " + str(min(x_pos,x)))
-            temp = max(x_pos, x) - min(x_pos, x)
-            print("Temp" + str(temp))
-            if temp < difference:
-                difference = temp
-                coordinate = x
-            print("New Difference: " + str(difference))
-            print()
-            print()
-
-        print("Difference:" + str(difference))
-        for x in x_points:
-            print(x)
-            if x != coordinate:
-                pya.moveTo(x, 82, 0.5, pya.easeOutQuad)
-                pya.click()
-                time.sleep(1)
-            else:
-                print("Not Clicking " + str(x)) 
-
-def position_check():
-    while True:
-        if key.is_pressed("g"):
-            position = pya.position()
-            print(position)
-            time.sleep(1)
-        
-
-final_measure()
+print(check_beans_feint())
+>>>>>>> parent of 7d77e3e (BIG UPDATE)

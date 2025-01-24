@@ -73,6 +73,7 @@ def find_beans_2(click):
             pya.moveTo(x + 30, y + 5, 0.5, pya.easeOutQuad)
             time.sleep(1)
             pya.click()
+            return True
     else:
         print("Find Beans 2: False")
         return False
@@ -88,8 +89,7 @@ def find_beans_3():
             alive_enemies.append(enemy)
     print("Alive Enemies: " + str(alive_enemies))
     print("Alive Enemies: " + str(len(alive_enemies)))
-    if len(alive_enemies) > 0:
-        beans_find = find_beans_4(alive_enemies[0])
+    beans_find = find_beans_4(alive_enemies[0])
     print(beans_find)
     if len(alive_enemies) != 2 and beans_find == None:
         return False
@@ -112,8 +112,6 @@ def find_beans_3():
                 print("Beans is: " + alive_enemies[1])
                 pya.moveTo(x_two + 30, y_two, 0.5, pya.easeOutQuad)
                 pya.click()
-    else:
-        return False
 
 
 
@@ -131,44 +129,6 @@ def find_beans_4(alive_enemy):
             pya.click()
             return True
 
-import spell_index as si
-import pyautogui as pya
-import time
-import keyboard as key
-
-def final_measure():
-    time.sleep(1)
-    medulla = si.spell_maker("Myth_Symbol")
-    position = si.image_search(medulla, 0.7)
-    if position != None:
-
-        x_pos,y_pos = position
-        print("X_Pos" + str(x_pos))
-        x_points = [182, 437, 678, 924]
-        difference = 1023
-        coordinate = 0
-        for x in x_points:
-            print("Difference: " + str(difference))
-            print("Max: " + str(max(x_pos,x)))
-            print("Min: " + str(min(x_pos,x)))
-            temp = max(x_pos, x) - min(x_pos, x)
-            print("Temp" + str(temp))
-            if temp < difference:
-                difference = temp
-                coordinate = x
-            print("New Difference: " + str(difference))
-            print()
-            print()
-
-        print("Difference:" + str(difference))
-        for x in x_points:
-            print(x)
-            if x != coordinate:
-                pya.moveTo(x, 82, 0.5, pya.easeOutQuad)
-                pya.click()
-                time.sleep(1)
-            else:
-                print("Not Clicking " + str(x)) 
 
 def check_beans_feint():
     time.sleep(1)
@@ -314,7 +274,7 @@ def part_one():
     time.sleep(3)
 
 def part_two_fight():
-
+    minion = False
 
     #Strategy:
     #   1. Cast Frenzy
@@ -329,10 +289,8 @@ def part_two_fight():
             return
         elif find_beans_2(True) == True:
             return
-        elif find_beans_3() == True:
-            return
         else:
-            final_measure()
+            find_beans_3()
 
     def check_on_beans():
         if (((find_beans_1(False) == False) and (find_beans_2(False) == False) and (find_beans_3() == False)) == True):
@@ -403,33 +361,41 @@ def part_two_fight():
 
         si.print_cool_way("Card Ready")
 
-        beans_status = si.image_search(si.spell_maker(beans), 0.5)
+        beans_status = check_on_beans()
         print("Witch Status " + str(si.check_for_card(witch)))
         print("Calendar Status " + str(si.check_for_card(calendar)))
 
-        while beans_status != None:
+        while beans_status == True:
             if (si.check_for_card(witch) == True):
-                si.spell_click(si.spell_maker(witch), 0, 0.9, True)
+<<<<<<< HEAD
+                minion == True
+=======
+>>>>>>> parent of 7d77e3e (BIG UPDATE)
+                si.spell_click(si.spell_maker(witch), 0, 0.7, True)
                 cast_on_beans()
             elif si.check_for_card(calendar):
                 si.spell_click(si.spell_maker(calendar), 0, 0.7, True)
                 cast_on_beans()
             si.wait_for_image("Pass_Button")
-            beans_status = si.image_search(si.spell_maker(beans), 0.6)
+            beans_status = check_on_beans()
 
 
 
     def medulla_fight():
         switch_to_balance()
 
-        position = si.image_search(si.spell_maker("Eye"), 0.7)
-        if position != None:
-            x,y = position
-            pya.moveTo(x + 135, y - 24, 0.5, pya.easeOutQuad)
-            time.sleep(1)
-            pya.click()
-            time.sleep(1)
-            si.spell_click(si.spell_maker("Yes_Button"), 0, 0.7, False)
+        if minion == True:
+            position = si.image_search(si.spell_maker("Yourself"), 0.7)
+            if position != None:
+                x,y = position
+                pya.moveTo(x - 100, y - 20, 0.5, pya.easeOutQuad)
+                time.sleep(1)
+                pya.click()
+                time.sleep(1)
+
+        if si.check_for_card("Yes_Button") == True:
+            yes_button = si.spell_maker("Yes_Button")
+            si.spell_click(yes_button, 0, 0.7, False)
 
         def check_medulla_stats():
             medulla = si.spell_maker("Myth_Symbol")
@@ -441,40 +407,55 @@ def part_two_fight():
         def vaporize():
             if si.check_for_card("Unready_Draw_Button") == True:
                 try_to_discard(["Witch's_House_Call", "Celestial_Calendar", "Frenzy", "Extract_Pig_Enchanted_Celestial_Calendar",
-                                "Extract_Pig_Enchanted_Witch's_House_Call", "Unready_Witch's_House_Call", "Unready_Celestial_Calendar"
-                                , "Extract_Pig"])
+                "Extract_Pig_Enchanted_Witch's_House_Call", "Unready_Witch's_House_Call", "Unready_Celestial_Calendar"
+                , "Extract_Pig"])
             si.spell_click(si.spell_maker("Draw_Button"), 0, 0.7, False)
-            si.spell_click(si.spell_maker("Vaporize_Treasure_Card"), 0, 0.7, True)
+            si.spell_click(si.spell_maker("Vaporize_Treasure_Card"), 0, 0.9, True)
             cast_on_medulla()
 
-        dispel = si.spell_maker("Headquarters_Dispel")
-        feint = si.spell_maker("Headquarters_Feint")
+        dispel = "Headquarters_Dispel"
+        feint = "Headquarters_Feint"
 
-        #1. Try To Discard Unecessary Cards
-        #2. If there is both a feint and a dispel, then vaporize
-        #3. If there is a dispel, but no feint, with a feint in deck, then feint
-        #4. If there is a dispel, but no feint, with no feint in deck, with a reshuffle, then reshuffle
-        #5. If Nothing else then vaporize
+            #1. Try To Discard Unecessary Cards
+            #2. If there is both a feint and a dispel, then vaporize
+            #3. If there is a dispel, but no feint, with a feint in deck, then feint
+            #4. If there is a dispel, but no feint, with no feint in deck, with a reshuffle, then reshuffle
+            #5. If Nothing else then vaporize
 
         while (si.check_for_card("Spell_Book") == False):
             try_to_discard(["Witch's_House_Call", "Celestial_Calendar", "Frenzy", "Extract_Pig_Enchanted_Celestial_Calendar","Extract_Pig_Enchanted_Witch's_House_Call", "Clear_Mind", 
-                            "Unready_Witch's_House_Call", "Unready_Celestial_Calendar"])
+                "Unready_Witch's_House_Call", "Unready_Celestial_Calendar"])
             check_medulla_stats()
+<<<<<<< HEAD
+            time.sleep(1.5)
             check_dispel = si.image_search(dispel, 0.9)
             check_feint = si.image_search(feint, 0.9)
+            deck_feint = si.image_search(si.spell_maker("Feint"), 0.7)
+            deck_reshuffle = si.image_search(si.spell_maker("Reshuffle"), 0.7)
+=======
+            check_dispel = si.check_for_card(dispel)
+            check_feint = si.check_for_card(feint)
             deck_feint = si.check_for_card("Feint")
             deck_reshuffle = si.check_for_card("Reshuffle")
+>>>>>>> parent of 7d77e3e (BIG UPDATE)
 
-            if ((check_dispel) != None) and (check_feint != None):
+            if ((check_dispel) == True) and (check_feint == True):
                 vaporize()
-            elif ((check_dispel) != None) and (check_feint == None) and (deck_feint == True):
+<<<<<<< HEAD
+            elif ((check_dispel) != None) and (check_feint == None) and (deck_feint != None):
+                si.spell_click(si.spell_maker("Feint"), 0, 0.7, True)
+                cast_on_medulla()
+            elif (check_dispel != None) and (check_feint == None) and (deck_reshuffle != None):
+=======
+            elif ((check_dispel) == True) and (check_feint != True) and (deck_feint == True):
                 si.spell_click(si.spell_maker("Feint"))
                 cast_on_medulla()
-            elif (check_dispel != None) and (check_feint == None) and (deck_reshuffle == True):
+            elif (check_dispel == True) and (check_feint != True) and (deck_reshuffle == True):
+>>>>>>> parent of 7d77e3e (BIG UPDATE)
                 attempt_to_reshuffle()
             else:
                 vaporize()
-            si.wait_for_image("Pass_Button")
+                si.wait_for_image("Pass_Button")
         
             
     spells = {"Witch's_House_Call": "Extract_Pig", "Celestial_Calendar": "Extract_Pig",}
@@ -523,12 +504,14 @@ def part_two_fight():
     beans_fight()
     medulla_fight()
 
-si.print_cool_way("Now Starting Headquarters Dungeon")
-time.sleep(2)
-si.game_click()
-part_one()
+#si.print_cool_way("Now Starting Headquarters Dungeon")
+#time.sleep(2)
+#si.game_click()
+#part_one()
 
-si.print_cool_way("Now Starting Part Two Of Dungeon")
-outfit_equip("1")
-part_two()
+#si.print_cool_way("Now Starting Part Two Of Dungeon")
+#outfit_equip("1")
+si.wait_for_image("Pass_Button")
+part_two_fight()
+#part_two()
 
