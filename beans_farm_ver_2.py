@@ -13,6 +13,7 @@ def try_to_discard(possible_discards):
                     print("Discarded Too Many Reshuffles")
                     continue
                 else:
+                    print("Discarding Reshuffle")
                     reshuffle -=1
             print("Reshuffles Left: " + str(reshuffle))
             si.discard_card(i)
@@ -336,11 +337,11 @@ def part_two_fight():
         else:
             return True
     def attempt_to_reshuffle():
-        while si.check_for_card("Unready_Reshuffle") == True:
-            si.pass_round()
-            si.wait_for_image("Pass_Button")
-        si.spell_click(si.spell_maker("Reshuffle"), 0, 0.7, True)
-        si.cast_on_yourself()
+        si.pass_round()
+        si.wait_for_image("Pass_Button")
+        if si.check_for_card("Reshuffle") == True:
+            si.spell_click(si.spell_maker("Reshuffle"), 0, 0.7, True)
+            si.cast_on_yourself()
 
     def free_friends(friend):
         clear_mind = si.spell_maker("Clear_Mind")
@@ -354,7 +355,7 @@ def part_two_fight():
     def beans_fight():
 
         si.print_cool_way("Attempting To Fight Beans")
-        spells = {"Witch's_House_Call": "Extract_Pig", "Celestial_Calendar": "Extract_Pig"}
+        spells = {"Medusa": "Extract_Pig", "Ninja_Pigs": "Extract_Pig"}
 
         extras = []
         for i in spells:
@@ -364,8 +365,8 @@ def part_two_fight():
         if len(extras) <= 0:
             try_to_discard(["Clear_Mind", "Frenzy", "Reshuffle"])
 
-        calendar = "Extract_Pig_Enchanted_Celestial_Calendar"
-        witch = "Extract_Pig_Enchanted_Witch's_House_Call"
+        medusa = "Extract_Pig_Enchanted_Medusa"
+        ninja_pigs = "Extract_Pig_Enchanted_Ninja_Pigs"
 
         while si.check_for_card("Feint") == False:
             si.print_cool_way("Feint Not Found")
@@ -386,7 +387,7 @@ def part_two_fight():
                     extras.append(True)
             time.sleep(1)
         
-        while (si.check_for_card(witch) == False) and (si.check_for_card(calendar) == False) and (check_on_beans() == True):
+        while (si.check_for_card(medusa) == False) and (si.check_for_card(ninja_pigs) == False) and (check_on_beans() == True):
             try_to_discard(["Frenzy", "Reshuffle"])
             si.pass_round()
             si.wait_for_image("Pass_Button")
@@ -400,16 +401,18 @@ def part_two_fight():
         si.print_cool_way("Card Ready")
 
         beans_status = si.image_search(si.spell_maker(beans), 0.5)
-        print("Witch Status " + str(si.check_for_card(witch)))
-        print("Calendar Status " + str(si.check_for_card(calendar)))
+        print("Witch Status " + str(si.check_for_card(medusa)))
+        print("Calendar Status " + str(si.check_for_card(ninja_pigs)))
 
         while beans_status != None:
-            if (si.check_for_card(witch) == True):
-                si.spell_click(si.spell_maker(witch), 0, 0.9, True)
-                cast_on_beans(si.spell_maker(witch))
-            elif si.check_for_card(calendar):
-                si.spell_click(si.spell_maker(calendar), 0, 0.7, True)
-                cast_on_beans(si.spell_maker(calendar))
+            if (si.check_for_card(medusa) == True):
+                si.spell_click(si.spell_maker(medusa), 0, 0.9, True)
+                cast_on_beans(si.spell_maker(medusa))
+            elif si.check_for_card(ninja_pigs):
+                si.spell_click(si.spell_maker(ninja_pigs), 0, 0.7, True)
+                cast_on_beans(si.spell_maker(ninja_pigs))
+            else:
+                si.pass_round()
             si.wait_for_image("Pass_Button")
             beans_status = si.image_search(si.spell_maker(beans), 0.6)
 
@@ -418,7 +421,7 @@ def part_two_fight():
     def medulla_fight():
         switch_to_balance()
 
-        position = si.image_search(si.spell_maker("Eye"), 0.7)
+        position = si.image_search(si.spell_maker("Eye"), 0.9)
         if position != None:
             x,y = position
             pya.moveTo(x + 135, y - 24, 0.5, pya.easeOutQuad)
@@ -436,9 +439,8 @@ def part_two_fight():
 
         def vaporize():
             if si.check_for_card("Unready_Draw_Button") == True:
-                try_to_discard(["Witch's_House_Call", "Celestial_Calendar", "Frenzy", "Extract_Pig_Enchanted_Celestial_Calendar",
-                                "Extract_Pig_Enchanted_Witch's_House_Call", "Unready_Witch's_House_Call", "Unready_Celestial_Calendar"
-                                , "Extract_Pig"])
+                try_to_discard(["Medusa", "Ninja_Pigs", "Frenzy", "Extract_Pig_Enchanted_Medusa",
+                                "Extract_Pig_Enchanted_Ninja_Pigs","Extract_Pig"])
             si.spell_click(si.spell_maker("Draw_Button"), 0, 0.7, False)
             si.spell_click(si.spell_maker("Vaporize_Treasure_Card"), 0, 0.7, True)
             cast_on_medulla()
@@ -464,7 +466,7 @@ def part_two_fight():
             if ((check_dispel) != None) and (check_feint != None):
                 vaporize()
             elif ((check_dispel) != None) and (check_feint == None) and (deck_feint == True):
-                si.spell_click(si.spell_maker("Feint"))
+                si.spell_click(si.spell_maker("Feint"), 0, 0.7, False)
                 cast_on_medulla()
             elif (check_dispel != None) and (check_feint == None) and (deck_reshuffle == True):
                 attempt_to_reshuffle()
@@ -473,7 +475,7 @@ def part_two_fight():
             si.wait_for_image("Pass_Button")
         
             
-    spells = {"Witch's_House_Call": "Extract_Pig", "Celestial_Calendar": "Extract_Pig",}
+    spells = {"Medusa": "Extract_Pig", "Ninja_Pigs": "Extract_Pig",}
 
     extras = []
 
