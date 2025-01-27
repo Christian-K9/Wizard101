@@ -22,7 +22,7 @@ def collect_orbs():
         si.spell_click(si.spell_maker("Pinpoint"), 0, 0.9, False)
 
 reshuffle = 4
-vaporize = 36
+vaporizes = 36
 def try_to_discard(possible_discards):
     global reshuffle
     card_check = False
@@ -41,7 +41,7 @@ def try_to_discard(possible_discards):
     return card_check
 
 def switch_to_balance():
-    position = si.image_search(si.spell_maker("Yourself"), 0.7)
+    position = si.image_search(si.spell_maker("Yourself"), 0.8)
     if position != None:
         x,y = position
         x += 130
@@ -63,21 +63,27 @@ def outfit_equip(outfit_number):
     time.sleep(0.3)
     pya.keyUp(outfit_number)
 
-def refill_reshuffle():
+def refill_vaporize():
+    global vaporizes
     si.print_cool_way("Refilling Reshuffle")
     pya.press("p")
     treasure_card = si.spell_maker("Treasure_Card_Symbol")
     next_button = si.spell_maker("Arrow_Button")
-    vaporize = si.spell_maker("vaporize")
+    vaporize = si.spell_maker("Deck_Vaporize")
+    myth_symbol = si.spell_maker("Myth_Treasure_Card_Symbol")
     si.spell_click(treasure_card, 0, 0.9, False)
-    while si.check_for_card("vaporize") == False:
+    while si.check_for_card("Deck_Vaporize") == False:
         si.spell_click(next_button, 0, 0.7, False)
     position = si.image_search(vaporize, 0.7)
     x, y = position
     pya.moveTo(x, y, 0.5, pya.easeOutQuad)
-    while vaporize < 36:
+    print("Vaporizes To Fill: " + str(36 - vaporizes))
+    while vaporizes < 36:
         pya.click()
         time.sleep(1)
+        vaporizes += 1
+    time.sleep(1)
+    pya.press("p")
 
 def cast_on_quizzler():
     quizzler = si.spell_maker("Myth_Symbol")
@@ -119,13 +125,13 @@ def find_beans_3():
         if si.image_search(enemy, 0.7) != None:
             alive_enemies.append(enemy)
     if len(alive_enemies) > 0:
-        beans_find = find_beans_4(alive_enemies[0])
-    if len(alive_enemies) != 2 and beans_find == None:
-        return False
-    elif len(alive_enemies == 2):
-        medulla_pos = si.image_search(medulla, 0.7)
-        first_pos = si.image_search(alive_enemies[0], 0.7)
-        second_pos = si.image_search(alive_enemies[1], 0.7)
+        beans_finding = find_beans_4(alive_enemies[0])
+        if len(alive_enemies) != 2 and beans_finding == None:
+            return False
+        elif len(alive_enemies) == 2:
+            medulla_pos = si.image_search(medulla, 0.7)
+            first_pos = si.image_search(alive_enemies[0], 0.7)
+            second_pos = si.image_search(alive_enemies[1], 0.7)
         if (first_pos != None) and (second_pos != None):
             x_one, y_one = first_pos
             x_two, y_two = second_pos
@@ -232,7 +238,7 @@ def quizzler_battle():
     si.wait_for_image("Pass_Button")
     si.enchant_card("Epic", "Orthrus")
     orthrus = si.spell_maker("Epic_Enchanted_Orthrus")
-    si.spell_click(orthrus, 0, 0.7, True)
+    si.spell_click(orthrus, 0, 0.8, True)
     si.wait_for_image("More_Button")
 
     si.spell_click(More_Button, 0, 0.9, False)
@@ -280,17 +286,17 @@ def navigate_dungeon_first():
 
 def counter(seconds, image):
     while seconds > 0:
-        if si.check_for_card(image) == True:
-            return
         print(seconds)
         seconds -= 1
         time.sleep(1)
+        if si.check_for_card(image) == True:
+            return
     si.print_cool_way("Player Didn't Make It To Battle")
     time.sleep(1)
     si.print_cool_way("Returning Back...")
     transport = si.spell_maker("Pinpoint")
     si.spell_click(transport, 0, 0.9, False)
-    part_one()
+    farm()
 
 def multitask(method, seconds, image):
     navigator = threading.Thread(target=method)
@@ -452,15 +458,14 @@ def part_two_fight():
 
     def medulla_fight():
         switch_to_balance()
-
-        position = si.image_search(si.spell_maker("Eye"), 0.9)
-        if position != None:
-            x,y = position
-            pya.moveTo(x + 135, y - 24, 0.5, pya.easeOutQuad)
-            time.sleep(1)
-            pya.click()
-            time.sleep(1)
-            si.spell_click(si.spell_maker("Yes_Button"), 0, 0.7, False)
+        #position = si.image_search(si.spell_maker("Eye"), 0.9)
+        #if position != None:
+        #    x,y = position
+        #    pya.moveTo(x + 135, y - 24, 0.5, pya.easeOutQuad)
+        #    time.sleep(1)
+        #    pya.click()
+        #    time.sleep(1)
+        #    si.spell_click(si.spell_maker("Yes_Button"), 0, 0.7, False)
 
         def check_medulla_stats():
             medulla = si.spell_maker("Myth_Symbol")
@@ -470,13 +475,34 @@ def part_two_fight():
                 pya.moveTo(x + 25, y + 10, 0.5, pya.easeOutQuad)
 
         def vaporize():
+            global vaporizes
             if si.check_for_card("Unready_Draw_Button") == True:
                 try_to_discard(["Medusa", "Ninja_Pigs", "Frenzy", "Extract_Pig_Enchanted_Medusa",
                                 "Extract_Pig_Enchanted_Ninja_Pigs","Extract_Pig"])
             si.spell_click(si.spell_maker("Draw_Button"), 0, 0.7, False)
             si.spell_click(si.spell_maker("Vaporize_Treasure_Card"), 0, 0.7, True)
             cast_on_medulla()
-            vaporize -= 1
+            vaporizes -= 1
+            print("Vaporizes Left: " + str(vaporizes))
+
+        def check_if_dead():
+                Pass_Button = si.spell_maker("Pass_Button")
+                dead = False
+                Spell_Book = si.spell_maker("Spell_Book")
+                position = si.image_search(Pass_Button, 0.7)
+                while position == None:
+                    #If the pass button shows, then they're alive, if the spellbook shows, they're dead
+                    position = si.image_search(Pass_Button, 0.7)
+                    if (position != None):
+                        dead = False
+                        break
+                    time.sleep(1)
+                    position = si.image_search(Spell_Book, 0.7)
+                    if (position != None):
+                        dead = True
+                        exit
+                    time.sleep(1)
+                return dead
 
         dispel = si.spell_maker("Headquarters_Dispel")
         feint = si.spell_maker("Headquarters_Feint")
@@ -487,7 +513,7 @@ def part_two_fight():
         #4. If there is a dispel, but no feint, with no feint in deck, with a reshuffle, then reshuffle
         #5. If Nothing else then vaporize
         spell_book = si.check_for_card("Spell_Book")
-        while (spell_book == False):
+        while (check_if_dead() == False):
             try_to_discard(["Witch's_House_Call", "Celestial_Calendar", "Frenzy", "Extract_Pig_Enchanted_Celestial_Calendar","Extract_Pig_Enchanted_Witch's_House_Call", "Clear_Mind", 
                             "Unready_Witch's_House_Call", "Unready_Celestial_Calendar"])
             check_medulla_stats()
@@ -505,9 +531,8 @@ def part_two_fight():
                 attempt_to_reshuffle()
             else:
                 vaporize()
-            si.wait_for_image("Pass_Button")
-            if si.check_for_card(spell_book) == True:
-                return
+
+
         
             
     spells = {"Medusa": "Extract_Pig", "Ninja_Pigs": "Extract_Pig",}
@@ -608,9 +633,11 @@ def farm():
         timer.join()
         navigator.join()
 
-        si.spell_click(si.spell_maker("Pinpoint"))
+        part_two_fight()
+
+        si.spell_click(si.spell_maker("Pinpoint"), 0, 0.7, False)
         time.sleep(15)
-        refill_reshuffle()
+        refill_vaporize()
 
 farm()
 #listener_program.join()

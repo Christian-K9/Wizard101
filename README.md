@@ -12,13 +12,13 @@ install the following on command prompt:
 Spells Must Be in "Spell_Folder" File
     -If not Spells can be found on https://wiki.wizard101central.com
 
-resolution of screen must be 1024x768
+resolution of screen must be 1152x864
 Screen Must Be At Max Brightness
 
 aot_farm.py rules:
     -must have all spells your using in "Spell_Folder" File
     -must start by standing in front of enemies
-    -must have mount with at least 40% speed equipped
+    -must have mount with at least 50% speed equipped
 
 loremaster_farm.py rules:
     -must have all spells your using in "Spell_Folder" File
