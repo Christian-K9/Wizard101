@@ -1,49 +1,35 @@
 import os
 import sys
 import time
-
+import spell_index as si
 import os
 import sys
 import threading
 import time
 import keyboard  # Install with: pip install keyboard
 
-def stop_program():
-    """Exit the program completely."""
-    print("\nStopping program...")
-    os._exit(0)  # Hard exit
+def enchant_card(enchanted, spell):
+    si.print_cool_way1("Attempting To Enchant " + str(enchanted) + " With " + str(spell) + "...", 0.03)
+    si.spell_click(si.spell_maker(enchanted), 0, 0.9, False)
+    time.sleep(0.5)
+    si.spell_click(si.spell_maker(spell), 0, 0.9, False)
+    time.sleep(0.5)
 
 
-def restart_program():
-    """Restart the current Python script."""
-    print("Restarting program...")
-    python = sys.executable
-    os.execv(python, [python] + sys.argv)  # Fully restarts the script
-
-def main_program():
-    """Main loop to simulate program running."""
-    i = 1
-    while True:
-        print(f"Program running... ({i})")
-        time.sleep(1)
-        i += 1
-
-def listen_for_exit():
-    """Listen for 'q' to restart, or 'e' to exit completely."""
-    print("Press 'Q' to restart, 'E' to exit...")
-    while True:
-        if keyboard.is_pressed("q"):
-            print("\n'Q' pressed. Restarting...")
-            restart_program()
-        elif keyboard.is_pressed("e"):
-            print("\n'E' pressed. Exiting...")
-            stop_program()
+def try_to_enchant():
+    enchanted_list = {"Orthrus": "Colossal",
+                      "Myth_Blade": "Sharpened_Blade",
+                      "Spirit_Blade": "Sharpened_Blade",
+                      "Feint": "Potent_Trap"}
+    for i in enchanted_list:
+        spell = si.spell_maker(i)
+        enchantment = si.spell_maker(enchanted_list[i])
+        if (si.image_search(spell, 0.9) != None) and (si.image_search(enchantment, 0.9) != None):
+            enchant_card(enchanted_list[i], i)
+            try_again = True
+    try_again = False
+    if try_again == True:
+        try_to_enchant()
 
 
-if __name__ == "__main__":
-    # Start the key listener in a separate thread
-    listener_thread = threading.Thread(target=listen_for_exit, daemon=True)
-    listener_thread.start()
-
-    # Start the main program
-    main_program()
+try_to_enchant()
