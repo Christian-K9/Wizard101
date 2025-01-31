@@ -9,6 +9,25 @@ from PIL import Image
 import imagesearch as img
 import time
 import random
+import logging
+import datetime
+
+logger = logging.getLogger(__name__)
+
+logging.basicConfig(filename = "Wizard101_Farm.log", level = logging.INFO)
+
+
+def add_to_log(message):
+    logger.info(message)
+
+def add_to_outside_log(message):
+    logger.info(message)
+
+def check_log_location(message):
+    if __name__ == "__main__":
+        add_to_log(message)
+    else:
+        add_to_outside_log(message)
 
 def exit_game():
     sys.exit()

@@ -5,6 +5,15 @@ import threading
 import os
 import sys
 import keyboard as key
+import logging
+from datetime import datetime
+from datetime import date
+
+timing = datetime.now().strftime("%I:%M:%S %p")
+logger = logging.getLogger(__name__)
+si.check_log_location("Beans Farm:")
+si.check_log_location("     Started At: " + str(date.today()) + ", at " 
+                            + str(timing))
 
 def collect_orbs():
     si.print_cool_way("Collecting Orbs...")
