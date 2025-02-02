@@ -9,11 +9,14 @@ import logging
 from datetime import datetime
 from datetime import date
 
-timing = datetime.now().strftime("%I:%M:%S %p")
+def add_time():
+    timing = datetime.now().strftime("%I:%M:%S %p")
+    return str(timing)
+
 logger = logging.getLogger(__name__)
 si.check_log_location("Beans Farm:")
 si.check_log_location("     Started At: " + str(date.today()) + ", at " 
-                            + str(timing))
+                            + add_time())
 
 def collect_orbs():
     si.print_cool_way("Collecting Orbs...")
@@ -305,6 +308,7 @@ def counter(seconds, image):
     si.print_cool_way("Returning Back...")
     transport = si.spell_maker("Pinpoint")
     si.spell_click(transport, 0, 0.9, False)
+    time.sleep(7)
     farm()
 
 def multitask(method, seconds, image):
@@ -476,6 +480,10 @@ def part_two_fight():
         #    time.sleep(1)
         #    si.spell_click(si.spell_maker("Yes_Button"), 0, 0.7, False)
 
+        global reshuffle
+        if reshuffle == 4:
+            try_to_discard(["Reshuffle"])
+
         def check_medulla_stats():
             medulla = si.spell_maker("Myth_Symbol")
             if si.image_search(medulla, 0.6) != None:
@@ -615,8 +623,11 @@ si.print_cool_way("Now Starting Headquarters Dungeon")
 time.sleep(2)
 
 def farm():
-
+    attempt = 0
     while True:
+        attempt += 1
+        si.check_log_location("     Attempt Number: " + str(attempt))
+        start_time = time.time()
         si.game_click()
         time.sleep(1)
         collect_orbs()
@@ -647,6 +658,9 @@ def farm():
         si.spell_click(si.spell_maker("Pinpoint"), 0, 0.7, False)
         time.sleep(15)
         refill_vaporize()
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        si.check_log_location("     Time Passed: " + str(elapsed_time) + " Seconds")
 
 farm()
 #listener_program.join()

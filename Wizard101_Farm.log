@@ -1,8 +1,33 @@
-INFO:__main__:
-INFO:__main__:
-INFO:__main__:
-INFO:spell_index:
-INFO:spell_index:
-INFO:spell_index:
+INFO:__main__:Test
+INFO:__main__:Test
+INFO:root:Test
 INFO:spell_index:Beans Farm:
-INFO:spell_index:     Started At: 2025-01-31, at 11:58:52 AM
+INFO:spell_index:     Started At: 2025-01-31, at 02:10:37 PM
+INFO:spell_index:Attempt Number: 1
+INFO:spell_index:Beans Farm:
+INFO:spell_index:     Started At: 2025-01-31, at 02:11:01 PM
+INFO:spell_index:     Attempt Number: 1
+INFO:spell_index:Beans Farm:
+INFO:spell_index:     Started At: 2025-02-01, at 02:35:01 PM
+INFO:spell_index:     Attempt Number: 1
+INFO:spell_index:Time Passed: 972.2359936237335 Seconds
+INFO:spell_index:     Attempt Number: 2
+INFO:spell_index:Beans Farm:
+INFO:spell_index:     Started At: 2025-02-01, at 03:06:20 PM
+INFO:spell_index:     Attempt Number: 1
+INFO:spell_index:     Time Passed: 1015.2142565250397 Seconds
+INFO:spell_index:     Attempt Number: 2
+INFO:spell_index:Beans Farm:
+INFO:spell_index:     Started At: 2025-02-01, at 04:26:52 PM
+INFO:spell_index:     Attempt Number: 1
+INFO:spell_index:Beans Farm:
+INFO:spell_index:     Started At: 2025-02-01, at 04:27:05 PM
+INFO:spell_index:     Attempt Number: 1
+INFO:spell_index:     Time Passed: 861.3479039669037 Seconds
+INFO:spell_index:     Attempt Number: 2
+INFO:spell_index:     Time Passed: 1144.3939526081085 Seconds
+INFO:spell_index:     Attempt Number: 3
+INFO:spell_index:Beans Farm:
+INFO:spell_index:     Started At: 2025-02-01, at 05:22:13 PM
+INFO:spell_index:     Attempt Number: 1
+INFO:spell_index:     Attempt Number: 1
