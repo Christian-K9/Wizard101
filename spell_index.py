@@ -193,9 +193,9 @@ def game_click():
 
 def enchant_card(enchanted, spell):
     print_cool_way1("Attempting To Enchant " + str(enchanted) + " With " + str(spell) + "...", 0.03)
-    spell_click(spell_maker(enchanted), 0, 0.6, False)
+    spell_click(spell_maker(enchanted), 0, 0.7, False)
     time.sleep(0.5)
-    spell_click(spell_maker(spell), 0, 0.6, False)
+    spell_click(spell_maker(spell), 0, 0.7, False)
     time.sleep(0.5)
 
 def cast_on_yourself():
@@ -237,10 +237,9 @@ def aot_Battle(use_Enchanted, enchanted_card, spell_card):
     check_if_dead([enchanted_card], None, None)
 
 
-def two_round_battle(buff_enchant, buff,spell_enchant, spell):
+def two_round_battle(buff_enchant, buff,spell_enchant, spell, battle_type):
     pya.moveTo(200, 200, 0.5, pya.easeOutQuad)
     enchant_card(buff_enchant, buff)
-    enchant_card(spell_enchant, spell)
 
     buff = buff_enchant + "_Enchanted_" + buff
     hitter = spell_enchant + "_Enchanted_" + spell
@@ -248,9 +247,11 @@ def two_round_battle(buff_enchant, buff,spell_enchant, spell):
     cast_on_yourself()
     battle_idle()
     check_for_fizzles(buff, True)
+    enchant_card(spell_enchant, spell)
     spell_click(spell_maker(hitter), 0, 0.7, True)
-    check_if_dead([hitter], None, None)
-    victory_Idle("aot_battle")
+    check_if_dead([hitter], "Myth_Blade_Treasure_Card", "Cyclops_Treasure_Card")
+    if battle_type == "aot_battle":
+        victory_Idle("aot_battle")
 
 def three_round_battle(buff_enchant, first_buff, second_buff,spell_enchant, spell):
     pya.moveTo(200, 200, 0.5, pya.easeOutQuad)

@@ -34,6 +34,7 @@ def collect_orbs():
         si.spell_click(si.spell_maker("Pinpoint"), 0, 0.9, False)
 
 reshuffle = 4
+battle_reshuffle = 4
 vaporizes = 36
 def try_to_discard(possible_discards):
     global reshuffle
@@ -47,7 +48,7 @@ def try_to_discard(possible_discards):
                 else:
                     print("Discarding Reshuffle")
                     reshuffle -= 1
-            print("Reshuffles Left: " + str(reshuffle))
+                    print("Reshuffles Left: " + str(reshuffle))
             si.discard_card(i)
             card_check = True
     return card_check
@@ -390,11 +391,16 @@ def part_two_fight():
         else:
             return True
     def attempt_to_reshuffle():
+        global battle_reshuffle
         si.pass_round()
         si.wait_for_image("Pass_Button")
         if si.check_for_card("Reshuffle") == True:
             si.spell_click(si.spell_maker("Reshuffle"), 0, 0.7, True)
             si.cast_on_yourself()
+        si.wait_for_image("Pass_Button")
+        if battle_reshuffle > 1:
+            try_to_discard(["reshuffle"])
+            battle_reshuffle -= 1
 
     def free_friends(friend):
         clear_mind = si.spell_maker("Clear_Mind")
@@ -464,6 +470,8 @@ def part_two_fight():
                 cast_on_beans(si.spell_maker(ninja_pigs))
             else:
                 si.pass_round()
+                si.wait_for_image("Pass_Button")
+                try_to_discard(["Frenzy", "Reshuffle"])
             si.wait_for_image("Pass_Button")
             beans_status = si.image_search(si.spell_maker(beans), 0.6)
 
