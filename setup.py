@@ -9,7 +9,7 @@ def install_package(package):
 library = ["pyautogui", "opencv-python", "numpy", "keyboard", "imagesearch"]
 
 for i in library:
-    si.print_cool_way("Attempting To Install " + i)
+    si.print("Attempting To Install: " + i)
     install_package(i)
     print()
     time.sleep(2)
