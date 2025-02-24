@@ -86,6 +86,18 @@ def color_maker(color):
         elif color == colors[index]:
             return "\033[3" + str(index) + "m"
         index += 1
+
+def color_maker(message, color):
+    colors = ["Black", "Red", "Green", "Yellow", "Blue", "Magenta", "Cyan", "White"]
+    index = 0
+    while index < len(colors):
+        if color == "default":
+            return "\033[0m"
+        elif color == colors[index]:
+            word = ("\033[3" + str(index) + "m" + message)
+            print_cool_way(word)
+            print("\033[0m")
+        index += 1
 # Scroll across screen if image isn't found
 def scroll_and_search(spell):
     spell_found = False
@@ -270,7 +282,6 @@ def three_round_battle(buff_enchant, first_buff, second_buff,spell_enchant, spel
     cast_on_yourself
     battle_idle()
     victory_Idle("aot_battle")
-
 
 #Blades You Twice, Then Cast Orthrus  
 def four_round_battle(enchanted_list, spell_card_list, alternate_buff, alternate_hitter, battle_type):

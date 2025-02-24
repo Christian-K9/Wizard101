@@ -9,7 +9,10 @@ def install_package(package):
 library = ["pyautogui", "opencv-python", "numpy", "keyboard", "imagesearch"]
 
 for i in library:
+<<<<<<< Updated upstream
     si.print("Attempting To Install: " + i)
+=======
+>>>>>>> Stashed changes
     install_package(i)
     print()
     time.sleep(2)
