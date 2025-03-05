@@ -12,6 +12,9 @@ def print_card_list(card_list):
 rank = int(input("What Rank Are The Enemies? "))
 enchanted_card = input("What Kind of Extract Are You Using? ")
 
+si.print_cool_way("Now Starting Monstrology Farm")
+time.sleep(5)
+
 def higher_rank_battles():
     enchanted_list = []
     spell_card_list = []
