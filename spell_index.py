@@ -200,6 +200,9 @@ def game_click():
         pya.click()
         time.sleep(0.5)
         pya.moveTo(x, y - 100, 0.5, pya.easeOutQuad)
+    else:
+        print_cool_way("Spell_Book Not Found")
+        
     #middle = 1393 477
     #spell book = 1837, 817
 
