@@ -38,7 +38,7 @@ while True:
     if len(times) != 0:
         for i in times:
             average += i
-    average /= len(times)
+        average /= len(times)
             #average = round(average, 2)
     si.print_cool_way("\033[33m" + "Average Time Is " + str(average) + " Minutes" + "\033[0m")
     attempt += 1
